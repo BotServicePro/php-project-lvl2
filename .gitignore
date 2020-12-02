@@ -1,0 +1,7 @@
+/vendor/
+logs
+*.swo
+*.swp
+*.cache
+/.idea
+.idea
