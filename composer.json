@@ -1,0 +1,14 @@
+{
+    "name": "alexdestebekou/php-project-lvl2",
+    "description": "Difference Finder is second project from Hexlet by Karakin Alexander!",
+    "require": {
+        "docopt/docopt": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexander Karakin",
+            "email": "karakin.alexandr@gmail.com"
+        }
+    ]
+}
