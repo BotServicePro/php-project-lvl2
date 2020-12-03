@@ -2,4 +2,4 @@ install:
 	composer install
 
 validate:
-    composer validate
+	composer validate
