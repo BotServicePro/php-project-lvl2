@@ -9,7 +9,7 @@ if (file_exists($autoloadPath1)) {
 } else {
     require_once $autoloadPath2;
 }
-require('../vendor/docopt/docopt/src/docopt.php');
+//require_once ('../vendor/docopt/docopt/src/docopt.php');
 
 $doc = <<<DOC
 Usage:
