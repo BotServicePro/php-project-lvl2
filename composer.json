@@ -6,6 +6,9 @@
       "ext-json": "*"
     },
     "license": "MIT",
+    "bin" : [
+        "bin/gendiff"
+    ],
     "authors": [
         {
             "name": "Alex Karakin",
