@@ -2,7 +2,8 @@
     "name": "hexlet/code",
     "description": "Difference Finder is second project from Hexlet by Karakin Alexander!",
     "require": {
-        "docopt/docopt": "^1.0"
+        "docopt/docopt": "^1.0",
+      "ext-json": "*"
     },
     "license": "MIT",
     "authors": [
