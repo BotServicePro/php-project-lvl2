@@ -2,6 +2,8 @@
 
 namespace php\project\lvl2\GenDiff;
 
+use Exception;
+
 $path1 = __DIR__ . '/file1.json';
 $path2 = __DIR__ . '/file2.json';
 
@@ -20,12 +22,12 @@ function genDiff ($path1, $path2)
         foreach ($decodedFirstFile as $keyFromFirstFile => $valueFromFirstValue ) { // берем значения из первого файла
             foreach ($decodedSecondFile as $keyFromSecondFile => $valueFromSecondFile) { // берем значения из второго файла
                 if (array_key_exists($keyFromFirstFile, $decodedFirstFile) === true && array_key_exists($keyFromFirstFile, $decodedSecondFile) === false) { // если значение было но исчезло (по ключу)  - записываем как минус
-                    $var = var_export($valueFromFirstValue, true);
-                    $result .= "\t- $keyFromFirstFile: $var \n"; // var_export возвращает стринговое значение
+                    $var = var_export($valueFromFirstValue, true); // var_export возвращает стринговое значение
+                    $result .= "\t- $keyFromFirstFile: $var \n";
                     break;
                 } elseif ($valueFromFirstValue === $valueFromSecondFile) { // если значение осталось неизменным - записываем как НЕизменное
                     $var = var_export($valueFromFirstValue, true);
-                    $result .= "\t  $keyFromFirstFile: $var \n"; // var_export возвращает стринговое значение
+                    $result .= "\t  $keyFromFirstFile: $var \n";
                     break;
                 } elseif ($valueFromFirstValue !== $valueFromSecondFile && $keyFromFirstFile === $keyFromSecondFile) { // если ключ остался но изменилось значение - записываем как измененное значене
                     $var = var_export($valueFromFirstValue, true);
@@ -41,8 +43,11 @@ function genDiff ($path1, $path2)
 
         $result = "{" . "\n" . $result  . "}";
         print_r($result);
+        return $result;
+    } elseif (!is_readable($path1) || !is_readable($path2)) {
+        throw new Exception("'{$path1}' or '{$path2}' is not readable");
     }
-    return $result;
+    return null;
 }
 
 genDiff($path1, $path2);
