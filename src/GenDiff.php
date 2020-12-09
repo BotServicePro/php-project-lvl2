@@ -16,7 +16,6 @@ function genDiff ($path1, $path2)
         ksort($decodedFirstFile, SORT_REGULAR);
         $decodedSecondFile = json_decode($readSecondFile, $associative = true);
         ksort($decodedSecondFile, SORT_REGULAR);
-        print_r($decodedSecondFile);
         $result = '';
 
         foreach ($decodedFirstFile as $keyFromFirstFile => $valueFromFirstValue ) { // берем значения из первого файла
@@ -42,6 +41,7 @@ function genDiff ($path1, $path2)
         }
 
         $result = "{" . "\n" . $result  . "}";
+        $result = str_replace("'", '', $result);
         print_r($result);
         return $result;
     } elseif (!is_readable($path1) || !is_readable($path2)) {
@@ -49,5 +49,4 @@ function genDiff ($path1, $path2)
     }
     return null;
 }
-
 genDiff($path1, $path2);
