@@ -1,7 +1,5 @@
 {
   "timeout": 20,
   "verbose": true,
-  "host": "hexlet.io",
-  "secondtimeout": 80,
-  "newParameter": "hui"
+  "host": "hexlet.io"
 }

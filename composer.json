@@ -10,6 +10,11 @@
     "bin" : [
         "bin/gendiff"
     ],
+    "autoload": {
+        "files": [
+            "src/GenDiff.php"
+        ]
+    },
     "authors": [
         {
             "name": "Alex Karakin",
