@@ -1,27 +1,14 @@
 <?php
 
-namespace GenDiff;
+namespace php\project\lvl2\GenDiff;
 
 use Exception;
 use function Funct\Collection\flattenAll;
 
+
 $path1 = __DIR__ . '/file1.json';
 $path2 = __DIR__ . '/file2.json';
 
-function  differenceFinder($arr1, $arr2) { // функция поиска измененных значений в обоих массивах
-    $result = [];
-    foreach ($arr1 as $keyFromFirstFile => $valueFromFirstValue ) { // берем значения из первого файла
-        foreach ($arr2 as $keyFromSecondFile => $valueFromSecondFile) { // берем значения из второго файла
-            if ($valueFromFirstValue !== $valueFromSecondFile && $keyFromFirstFile === $keyFromSecondFile) { // если ключ остался но изменилось значение - записываем как измененное значене
-                $var = var_export($valueFromFirstValue, true);
-                $result[] = ["\t"  . $keyFromFirstFile . ': ' . $var . ' -'];
-                $var = var_export($valueFromSecondFile, true);
-                $result[] = ["\t"  . $keyFromSecondFile . ': ' . $var . ' +'];
-            }
-        }
-    }
-    return  $result;
-}
 
 function genDiff ($path1, $path2)
 {
@@ -29,34 +16,40 @@ function genDiff ($path1, $path2)
         $readFirstFile = file_get_contents($path1);
         $readSecondFile = file_get_contents($path2);
         $decodedFirstFile = json_decode($readFirstFile, $associative = true); // тру означает возврат в виде массива а не объекта
-        ksort($decodedFirstFile, SORT_REGULAR);
+        //ksort($decodedFirstFile, SORT_REGULAR);
         $decodedSecondFile = json_decode($readSecondFile, $associative = true);
-        ksort($decodedSecondFile, SORT_REGULAR);
-        $wasDeleted = array_diff_key($decodedFirstFile, $decodedSecondFile); // то что было удалено из первого массива
-        foreach ($wasDeleted as $key => $value) {
-            $wasDeleted[] = "\t"  . $key . ': ' . var_export($value, true) . ' -';
+        //ksort($decodedSecondFile, SORT_REGULAR);
+
+        $wasDeletedTemp = array_diff_key($decodedFirstFile, $decodedSecondFile); // то что было удалено из первого массива
+        //print_r($wasDeletedTemp);
+        foreach ($wasDeletedTemp as $key => $value) {
+            $wasDeleted[$key . ' -'] = var_export($value, true);
         }
 
-        $wasDeleted = array_intersect_key($wasDeleted, array_flip(array_filter(array_keys($wasDeleted), 'is_numeric')));
-        $wasNotChanged = array_intersect_assoc($decodedFirstFile, $decodedSecondFile); // то что не изменилось в обоих массивах
-        foreach ($wasNotChanged as $key => $value) {
-            $wasNotChanged[] = "\t"  . $key . ': ' . var_export($value, true) . '   ';
+        $wasNotChangedTemp = array_intersect_assoc($decodedFirstFile, $decodedSecondFile); // то что не изменилось в обоих массивах
+        foreach ($wasNotChangedTemp as $key => $value) {
+            $wasNotChanged[$key . '   '] = var_export($value, true);
         }
-        $wasNotChanged = array_intersect_key($wasNotChanged, array_flip(array_filter(array_keys($wasNotChanged), 'is_numeric')));
 
-        $wasAdded = array_diff_key($decodedSecondFile, $decodedFirstFile); // то что добавилось во второй массив
-        foreach ($wasAdded as $key => $value) {
-            $wasAdded[] = "\t"  . $key . ': ' . var_export($value, true) . ' +';
+        $wasAddedTemp = array_diff_key($decodedSecondFile, $decodedFirstFile); // то что добавилось во второй массив
+        foreach ($wasAddedTemp as $key => $value) {
+            $wasAdded[$key . ' +'] = var_export($value, true);
         }
-        $wasAdded = array_intersect_key($wasAdded, array_flip(array_filter(array_keys($wasAdded), 'is_numeric')));
-        $wasChanged = differenceFinder($decodedFirstFile, $decodedSecondFile); // то что осталось но изменилось
-        $wasChanged = flattenAll($wasChanged);
+
+        $wasChanged = [];
+        foreach ($decodedFirstFile as $key => $value) {
+            if (array_key_exists($key, $decodedSecondFile) === true && $decodedFirstFile[$key] !== $decodedSecondFile[$key]) {
+                $wasChanged[$key . ' -'] = $decodedFirstFile[$key];
+                $wasChanged[$key . ' +'] = $decodedSecondFile[$key];
+            }
+        }
+
         $result = array_merge($wasDeleted, $wasNotChanged, $wasAdded, $wasChanged);
+        ksort ($result);
         print_r($result);
-        ksort($result, SORT_STRING);
 
-        $result = "{" . "\n" . implode("\n", $result) . "\n" . "}";
-        print_r($result);
+//        $result = "{" . "\n" . implode("\n", $result) . "\n" . "}";
+//        print_r($result);
         //$result = str_replace("'", '', $result);
         return $result;
     } elseif (!is_readable($path1) || !is_readable($path2)) {
@@ -64,4 +57,8 @@ function genDiff ($path1, $path2)
     }
     return null;
 }
-genDiff($path1, $path2);
+
+try {
+    genDiff($path1, $path2);
+} catch (Exception $e) {
+}
