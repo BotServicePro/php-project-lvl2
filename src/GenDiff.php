@@ -3,12 +3,11 @@
 namespace php\project\lvl2\GenDiff;
 
 use Exception;
-use function Funct\Collection\flattenAll;
-
+use RecursiveArrayIterator;
+use RecursiveIteratorIterator;
 
 $path1 = __DIR__ . '/file1.json';
 $path2 = __DIR__ . '/file2.json';
-
 
 function genDiff ($path1, $path2)
 {
@@ -16,42 +15,40 @@ function genDiff ($path1, $path2)
         $readFirstFile = file_get_contents($path1);
         $readSecondFile = file_get_contents($path2);
         $decodedFirstFile = json_decode($readFirstFile, $associative = true); // тру означает возврат в виде массива а не объекта
-        //ksort($decodedFirstFile, SORT_REGULAR);
         $decodedSecondFile = json_decode($readSecondFile, $associative = true);
-        //ksort($decodedSecondFile, SORT_REGULAR);
-
         $wasDeletedTemp = array_diff_key($decodedFirstFile, $decodedSecondFile); // то что было удалено из первого массива
-        //print_r($wasDeletedTemp);
         foreach ($wasDeletedTemp as $key => $value) {
-            $wasDeleted[$key . ' -'] = var_export($value, true);
+            $wasDeleted[] = ' - ' . $key . ': ' . var_export($value, true); // var_export отвечает за фактическое отображение результата
         }
 
         $wasNotChangedTemp = array_intersect_assoc($decodedFirstFile, $decodedSecondFile); // то что не изменилось в обоих массивах
         foreach ($wasNotChangedTemp as $key => $value) {
-            $wasNotChanged[$key . '   '] = var_export($value, true);
+            $wasNotChanged[] = '   ' . $key . ': ' . var_export($value, true);
         }
 
         $wasAddedTemp = array_diff_key($decodedSecondFile, $decodedFirstFile); // то что добавилось во второй массив
         foreach ($wasAddedTemp as $key => $value) {
-            $wasAdded[$key . ' +'] = var_export($value, true);
+            $wasAdded[] = ' + ' . $key . ': ' . var_export($value, true);
         }
 
-        $wasChanged = [];
         foreach ($decodedFirstFile as $key => $value) {
             if (array_key_exists($key, $decodedSecondFile) === true && $decodedFirstFile[$key] !== $decodedSecondFile[$key]) {
-                $wasChanged[$key . ' -'] = $decodedFirstFile[$key];
-                $wasChanged[$key . ' +'] = $decodedSecondFile[$key];
+                $wasChanged[] = [' - ' . $key .  ': ' . $decodedFirstFile[$key], ' + ' . $key . ': ' . $decodedSecondFile[$key]];
             }
         }
 
-        $result = array_merge($wasDeleted, $wasNotChanged, $wasAdded, $wasChanged);
-        ksort ($result);
-        print_r($result);
+        $mergedResults = array_merge($wasDeleted, $wasNotChanged, $wasAdded, $wasChanged);
+        $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($mergedResults)); // вместо flattenAll
+        $sortedArr = iterator_to_array($iterator, false);
+        usort($sortedArr, function($a, $b) { // сортируем по пользовательской функции начиная с 4ого символа
+            return substr($a, 3, 1) <=> substr($b, 3, 1);
+        });
 
-//        $result = "{" . "\n" . implode("\n", $result) . "\n" . "}";
-//        print_r($result);
-        //$result = str_replace("'", '', $result);
-        return $result;
+        $stringWithSemicolons = "{" . "\n" . implode("\n", $sortedArr) . "\n" . "}";
+        $finalResult = str_replace("'", '', $stringWithSemicolons);
+        print_r($finalResult);
+        return $finalResult;
+
     } elseif (!is_readable($path1) || !is_readable($path2)) {
         throw new Exception("'{$path1}' or '{$path2}' is not readable");
     }
