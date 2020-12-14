@@ -1,17 +1,18 @@
 <?php
 
-namespace GenDiff;
+namespace Differ\GenDiff; // Differ мы сами указываем название! Любое!
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Exception;
 use function Funct\Collection\flattenAll;
 
-$path1 = __DIR__ . '/file1.json';
-$path2 = __DIR__ . '/file2.json';
-
 function genDiff ($path1, $path2)
 {
+
+    $path1 = '../' . $path1;
+    $path2 = '../' . $path2;
+
     if (is_file($path1) === true && is_file($path2) === true) {
         $readFirstFile = file_get_contents($path1);
         $readSecondFile = file_get_contents($path2);
@@ -44,7 +45,7 @@ function genDiff ($path1, $path2)
             return substr($a, 3, 1) <=> substr($b, 3, 1);
         });
 
-        $stringWithSemicolons = "{" . "\n" . implode("\n", $sortedArr) . "\n" . "}";
+        $stringWithSemicolons = "{" . "\n" . implode("\n", $sortedArr) . "\n" . "}" . "\n";
         $finalResult = str_replace("'", '', $stringWithSemicolons);
         print_r($finalResult);
         return $finalResult;
@@ -55,7 +56,7 @@ function genDiff ($path1, $path2)
     return null;
 }
 
-try {
-    genDiff($path1, $path2);
-} catch (Exception $e) {
-}
+//try {
+//    genDiff($path1, $path2);
+//} catch (Exception $e) {
+//}
