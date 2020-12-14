@@ -9,7 +9,9 @@ if (file_exists($autoloadPath1)) {
 } else {
     require_once $autoloadPath2;
 }
-require_once ('../vendor/docopt/docopt/src/docopt.php');
+
+//require_once ('../vendor/docopt/docopt/src/docopt.php');
+use function Differ\GenDiff\genDiff;
 
 $doc = <<<DOC
 gendiff -h
@@ -25,12 +27,8 @@ Options:
     -h --help                     Show this screen
     -v --version                  Show version
     --format <fmt>                Report format [default: stylish]
-  
 DOC;
 
-$args = Docopt::handle($doc, array('version' => 'Naval Fate 2.0'));
-foreach ($args as $k => $v)
-    echo $k . ': ' . json_encode($v) . PHP_EOL;
-    //echo GenDiff($path1, $path2);
+$args = Docopt::handle($doc, ['version' => '1.0']);
+genDiff($args['<firstFile>'], $args['<secondFile>']);
 
-// gendiff filepath1.json filepath2.json на вызов дать названия файлов
