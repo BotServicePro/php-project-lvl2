@@ -1,10 +1,11 @@
 <?php
 
-namespace php\project\lvl2\GenDiff;
+namespace GenDiff;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Exception;
-use RecursiveArrayIterator;
-use RecursiveIteratorIterator;
+use function Funct\Collection\flattenAll;
 
 $path1 = __DIR__ . '/file1.json';
 $path2 = __DIR__ . '/file2.json';
@@ -38,8 +39,7 @@ function genDiff ($path1, $path2)
         }
 
         $mergedResults = array_merge($wasDeleted, $wasNotChanged, $wasAdded, $wasChanged);
-        $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($mergedResults)); // вместо flattenAll
-        $sortedArr = iterator_to_array($iterator, false);
+        $sortedArr = flattenAll($mergedResults);
         usort($sortedArr, function($a, $b) { // сортируем по пользовательской функции начиная с 4ого символа
             return substr($a, 3, 1) <=> substr($b, 3, 1);
         });
