@@ -1,10 +1,11 @@
 <?php
 
-namespace Differ\GenDiff; // Differ мы сами указываем название! Любое!
+namespace Differ\GenDiff;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Exception;
+
 use function Funct\Collection\flattenAll;
 
 function genDiff($path1, $path2)
@@ -16,14 +17,14 @@ function genDiff($path1, $path2)
     if (is_file($path1) === true && is_file($path2) === true) {
         $readFirstFile = file_get_contents($path1);
         $readSecondFile = file_get_contents($path2);
-        $decodedFirstFile = json_decode($readFirstFile, $associative = true); // тру означает возврат в виде массива а не объекта
+        $decodedFirstFile = json_decode($readFirstFile, $associative = true); // тру означает возврат в виде массива
         $decodedSecondFile = json_decode($readSecondFile, $associative = true);
-        $wasDeletedTemp = array_diff_key($decodedFirstFile, $decodedSecondFile); // то что было удалено из первого массива
+        $wasDeletedTemp = array_diff_key($decodedFirstFile, $decodedSecondFile); // то что было удалено из первого
         foreach ($wasDeletedTemp as $key => $value) {
-            $wasDeleted[] = ' - ' . $key . ': ' . var_export($value, true); // var_export отвечает за фактическое отображение результата
+            $wasDeleted[] = ' - ' . $key . ': ' . var_export($value, true); // var_export фактический результат
         }
 
-        $wasNotChangedTemp = array_intersect_assoc($decodedFirstFile, $decodedSecondFile); // то что не изменилось в обоих массивах
+        $wasNotChangedTemp = array_intersect_assoc($decodedFirstFile, $decodedSecondFile);
         foreach ($wasNotChangedTemp as $key => $value) {
             $wasNotChanged[] = '   ' . $key . ': ' . var_export($value, true);
         }
@@ -35,7 +36,8 @@ function genDiff($path1, $path2)
 
         foreach ($decodedFirstFile as $key => $value) {
             if (array_key_exists($key, $decodedSecondFile) === true && $decodedFirstFile[$key] !== $decodedSecondFile[$key]) {
-                $wasChanged[] = [' - ' . $key .  ': ' . $decodedFirstFile[$key], ' + ' . $key . ': ' . $decodedSecondFile[$key]];
+                $wasChanged[] = [' - ' . $key .  ': ' . $decodedFirstFile[$key],
+                    ' + ' . $key . ': ' . $decodedSecondFile[$key]];
             }
         }
 
