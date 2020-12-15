@@ -7,7 +7,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Exception;
 use function Funct\Collection\flattenAll;
 
-function genDiff ($path1, $path2)
+function genDiff($path1, $path2)
 {
 
     $path1 = '../' . $path1;
@@ -41,7 +41,7 @@ function genDiff ($path1, $path2)
 
         $mergedResults = array_merge($wasDeleted, $wasNotChanged, $wasAdded, $wasChanged);
         $sortedArr = flattenAll($mergedResults);
-        usort($sortedArr, function($a, $b) { // сортируем по пользовательской функции начиная с 4ого символа
+        usort($sortedArr, function ($a, $b) {
             return substr($a, 3, 1) <=> substr($b, 3, 1);
         });
 
@@ -49,7 +49,6 @@ function genDiff ($path1, $path2)
         $finalResult = str_replace("'", '', $stringWithSemicolons);
         print_r($finalResult);
         return $finalResult;
-
     } elseif (!is_readable($path1) || !is_readable($path2)) {
         throw new Exception("'{$path1}' or '{$path2}' is not readable");
     }
