@@ -1,7 +1,5 @@
 <?php
 
-namespace Differ\GenDiffTest;
-
 use \PHPUnit\Framework\TestCase;
 
 use function Differ\GenDiff\genDiff;
