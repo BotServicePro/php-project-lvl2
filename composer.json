@@ -13,7 +13,11 @@
     "autoload": {
         "files": [
             "src/GenDiff.php"
-        ]
+        ],
+        "psr-4": {
+            "Differ\\GenDiff\\": "src",
+            "Differ\\GenDiffTest\\": "tests"
+        }
     },
     "scripts": {
         "phpcs": "phpcs --standard=PSR12",

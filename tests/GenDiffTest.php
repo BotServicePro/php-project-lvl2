@@ -1,6 +1,8 @@
 <?php
 
-use \PHPUnit\Framework\TestCase;
+namespace Differ\GenDiffTest;
+
+use PHPUnit\Framework\TestCase;
 
 use function Differ\GenDiff\genDiff;
 
@@ -8,7 +10,6 @@ class GenDiffTest extends TestCase
 {
     public function diffTest()
     {
-
         $expected1 = "{
                          - follow: false
                            host: hexlet.io
@@ -20,7 +21,5 @@ class GenDiffTest extends TestCase
         ";
 
         $this->assertEquals($expected1, genDiff('file1.json', 'file2.json'));
-
-
     }
 }
