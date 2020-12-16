@@ -1,19 +1,19 @@
 <?php
 
-namespace Differ\GenDiffTest;
+namespace Differ\Tests;
+
+use PHPUnit\Framework\TestCase;
+
+use function Differ\GenDiff\genDiff;
 
 $autoloadPath1 = __DIR__ . '/../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
 
 if (file_exists($autoloadPath1)) {
-    include_once $autoloadPath1;
+    require_once $autoloadPath1;
 } else {
-    include_once $autoloadPath2;
+    require_once $autoloadPath2;
 }
-
-use PHPUnit\Framework\TestCase;
-
-use function Differ\GenDiff\genDiff;
 
 class GenDiffTest extends TestCase
 {
