@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\GenDiffTest;
+namespace Differ\tests;
 
 use PHPUnit\Framework\TestCase;
 
@@ -10,9 +10,8 @@ class GenDiffTest extends TestCase
 {
     public function testGenDiff()
     {
-        $source = "fixtures/difftest.txt";
+        $source = __DIR__ . "/fixtures/difftest.txt";
         $expected = file_get_contents($source);
         $this->assertEquals($expected, genDiff('file1.json', 'file2.json'));
     }
 }
-
