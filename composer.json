@@ -4,7 +4,8 @@
     "require": {
         "docopt/docopt": "^1.0",
       "ext-json": "*",
-        "funct/funct": "^1.5"
+        "funct/funct": "^1.5",
+        "symfony/yaml": "^5.2"
     },
     "license": "MIT",
     "bin" : [
@@ -16,7 +17,8 @@
             "Differ\\tests\\": "tests"
         },
         "files": [
-            "src/GenDiff.php"
+            "src/GenDiff.php",
+            "src/Parsers.php"
         ]
     },
     "scripts": {
@@ -26,8 +28,7 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
-        "phpunit/phpunit": "^9.5",
-        "codeclimate/php-test-reporter": "^0.4.4"
+        "phpunit/phpunit": "^9.5"
     },
     "authors": [
         {
