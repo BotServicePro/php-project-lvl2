@@ -6,18 +6,32 @@ use Symfony\Component\Yaml\Yaml;
 
 use function Funct\Collection\flattenAll;
 use function Differ\Parsers\parser;
+use function Differ\Parsers\recursiveParser;
 
 const STARTTOSORTFROMSYMBOL = 4;
+const JSONEXTENSION = -4;
+const YMLEXTENSION = -3;
+
+function isMultidimensional($data)
+{
+    // функция должна вернуть true или false если объект/массивы многомерные
+    foreach ($data as $item) {
+        if (is_object($item) === true || is_array($item) === true) {
+            // если хотя бы один элемент в массиве будет объектом или массивом - это многомерные данные
+            return true;
+        }
+    }
+    return false;
+}
 
 function fileExtensionDataExtractor($fileName)
 {
-    $jsonExtension = (int) -4;
-    $ymlExtension = (int) -3;
-    if (substr($fileName, $ymlExtension) === 'yml') {
+    // извлекаем данные в зависимости от расширения файла
+    if (substr($fileName, YMLEXTENSION) === 'yml') { // если это yml файлы
         $file = file_get_contents($fileName);
-        $data = (array) Yaml::parse($file, Yaml::PARSE_OBJECT_FOR_MAP); // результат как объект
+        $data = Yaml::parse($file, Yaml::PARSE_OBJECT_FOR_MAP);
     }
-    if (substr($fileName, $jsonExtension) === 'json') {
+    if (substr($fileName, JSONEXTENSION) === 'json') { // если это json
         $file = file_get_contents($fileName);
         $data = json_decode($file, $associative = true);
     }
@@ -37,7 +51,18 @@ function genDiff($path1, $path2)
 
     $firstFile = fileExtensionDataExtractor($path1);
     $secondFile = fileExtensionDataExtractor($path2);
-    $parsedData = parser($firstFile, $secondFile);
+
+    // если хотя бы один из массивов многомерный - вызываем другой парсер
+    if (isMultidimensional($firstFile) === true || isMultidimensional($secondFile) === true) {
+        $parsedData = recursiveParser($firstFile, $secondFile);
+    } else {
+        $parsedData = parser($firstFile, $secondFile);
+    }
+
+
+
+
+
     $sortedArr = flattenAll($parsedData);
     usort($sortedArr, function ($a, $b) {
         return substr($a, STARTTOSORTFROMSYMBOL, 1) <=> substr($b, STARTTOSORTFROMSYMBOL, 1);
