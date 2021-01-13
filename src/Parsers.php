@@ -2,7 +2,7 @@
 
 namespace Differ\Parsers;
 
-function parser($firstFile, $secondFile) // рабочий парсер плоских данных
+function parser($firstFile, $secondFile) // рабочий парсер плоских
 {
     $firstFile = json_decode(json_encode($firstFile), true);
     $secondFile = json_decode(json_encode($secondFile), true);
