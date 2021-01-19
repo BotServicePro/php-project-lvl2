@@ -18,7 +18,10 @@
         },
         "files": [
             "src/GenDiff.php",
-            "src/Parser.php"
+            "src/Parser.php",
+            "src/Formatters.php",
+            "src/Formatters/Plain.php",
+            "src/Formatters/Stylish.php"
         ]
     },
     "scripts": {
