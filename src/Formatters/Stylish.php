@@ -81,25 +81,20 @@ function convertToString($data, $depth)
     $tabulation = str_repeat($space, $depth);
     $string = '';
 
-    // тут при любых ситуациях будет массив,
-    // если не массив то выше он отфильтруется
-    foreach ($data as $key => $value) {
-        //print_r($data);
-
+    $stringedData = array_map(function ($key, $value) use ($depth, $tabulation, $space, $string) {
         if (!is_array($value)) {
-            $string = $tabulation . $space . $key . ': ' . $value;
+            return $tabulation . $space . $key . ': ' . $value;
         }
-        // тут проверяем на вложенность, если массив в массиве
         if (is_array($value) && is_array($value[key($value)])) {
-            $converted2 = convertToString($value, $depth + 1);
-            $string = $string . "\n" . $tabulation . $space . $key . ': ' . $converted2;
+            $stringed = convertToString($value, $depth + 1);
+            return $tabulation . $space . $key . ': ' . $stringed;
         }
-
         if (is_array($value) && !is_array($value[key($value)])) {
-            $converted = convertToString($value, $depth + 1);
-            $string = $string . "\n" . $tabulation . $space . $key . ': ' . $converted;
-            $string = preg_replace('/^\h*\v+/m', '', $string); // удаляем пустые строки
+            $stringed2 = convertToString($value, $depth + 1);
+            $string = $string . "\n" . $tabulation . $space . $key . ': ' . $stringed2;
+            return preg_replace('/^\h*\v+/m', '', $string); // удаляем пустые строки
         }
-    }
-    return "{" . "\n" . $string . "\n" . $tabulation . "}";
+    }, array_keys($data), $data);
+    $stringedData = implode("\n", $stringedData);
+    return "{" . "\n" . $stringedData . "\n" . $tabulation . "}";
 }
