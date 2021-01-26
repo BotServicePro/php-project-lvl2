@@ -5,11 +5,3 @@ logs
 *.cache
 /.idea
 .idea
-file1.json
-file2.json
-file1.yml
-file2.yml
-file1rec.json
-file2rec.json
-file1rec.yml
-file2rec.yml
