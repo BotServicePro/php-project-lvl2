@@ -31,13 +31,19 @@ class GenDiffTest extends TestCase
         $this->assertEquals($expected4, genDiff('file1.json', 'file2.yml', $format = 'stylish'));
 
         // Сравнение рекурсивных json и json
-        $source = __DIR__ . "/fixtures/compareRecursiveResult.txt";
+        $source = __DIR__ . "/fixtures/compareRecursiveResultStylish.txt";
         $expected5 = file_get_contents($source);
         $this->assertEquals($expected5, genDiff('file1rec.json', 'file2rec.json', $format = 'stylish'));
 
         // Сравнение рекурсивных yml и yml
-        $source = __DIR__ . "/fixtures/compareRecursiveResult.txt";
+        $source = __DIR__ . "/fixtures/compareRecursiveResultStylish.txt";
         $expected6 = file_get_contents($source);
         $this->assertEquals($expected6, genDiff('file1rec.yml', 'file2rec.yml', $format = 'stylish'));
+
+        // Сравнение рекурсивных файлов json и yml в формате Plain
+        $source = __DIR__ . "/fixtures/compareRecursiveResultPlain.txt";
+        $expected7 = file_get_contents($source);
+        $this->assertEquals($expected7, genDiff('file1rec.yml', 'file2rec.yml', $format = 'plain'));
+
     }
 }
