@@ -42,14 +42,20 @@ class GenDiffTest extends TestCase
         $expected6 = file_get_contents($source);
         $this->assertEquals($expected6, genDiff($path . 'file1rec.yml', $path . 'file2rec.yml', $format = 'stylish'));
 
-        // Сравнение рекурсивных файлов json и yml в формате Plain
+        // Сравнение рекурсивных файлов yml и yml в формате Plain
         $source = __DIR__ . "/fixtures/compareRecursiveResultPlain.txt";
         $expected7 = file_get_contents($source);
         $this->assertEquals($expected7, genDiff($path . 'file1rec.yml', $path . 'file2rec.yml', $format = 'plain'));
 
-        // Сравнение рекурсивных файлов json и yml в формате Json
+        // Сравнение рекурсивных файлов yml и json в формате Json
         $source = __DIR__ . "/fixtures/compareJsonRecursiveResult.txt";
         $expected8 = file_get_contents($source);
         $this->assertEquals($expected8, genDiff($path . 'file1rec.yml', $path . 'file2rec.json', $format = 'json'));
+
+        // Сравнение рекурсивных файлов по хекслету
+        $source = __DIR__ . "/fixtures/hexletResult.txt";
+        $expected9 = file_get_contents($source);
+        $this->assertEquals($expected9, genDiff($path . 'hexletFile1.json', $path .
+            'hexletFile2.json', $format = 'stylish'));
     }
 }
