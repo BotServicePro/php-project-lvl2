@@ -4,30 +4,57 @@ namespace Differ\Formatters\Plain;
 
 use function Funct\Collection\flattenAll;
 
-const STARTTOSORTFROMSYMBOL = 4;
-
-function plain($data)
+function render($data)
 {
+    $stringedData = plain($data, '');
+    $formatedData = implode("\n", flattenAll($stringedData));
+    print_r($formatedData);
+    return $formatedData;
+}
 
-    // если содержимое НЕ ОБъЕКТ И НЕ МАССИВ, возвращаем ключ
-    if (is_array($data) === false && is_object($data) === false) {
-        return [$data['key']];
+function plain($data, $path)
+{
+    // сортируем если есть значения
+    if (array_key_exists('key', $data[0])) {
+        array_multisort(
+            array_column($data, 'key'),
+            SORT_ASC,
+            SORT_NATURAL + SORT_FLAG_CASE,
+            $data
+        );
     }
 
-
-    // попробуем собрать полный путь до файлов
-    $onlyPath = array_reduce($data, function ($acc, $item) {
-        //print_r($item);
-
-        if ($item['type'] === 'nested') {
-            return $acc[$item['key']];
+    $result = array_map(function ($item) use ($path) {
+        switch ($item['type']) {
+            case 'added':
+                $stringedData = convertToString($item['value']);
+                return 'Property ' . "'" .$path . $item['key'] . "'" . ' was added with value: ' . $stringedData;
+            case 'removed':
+                return 'Property ' . "'" . $path . $item['key'] . "'" . " was removed";
+            case 'changed':
+                $oldValue = convertToString($item['oldValue']);
+                $newValue = convertToString($item['newValue']);
+                return 'Property ' . "'" .$path . $item['key'] . "'" .
+                    " was updated. From " . $oldValue . ' to ' . $newValue;
+            case 'unchanged':
+                return [];
+            case 'nested':
+                $nestedPath = $path . $item['key'] . '.';
+                $children = $item['children'];
+                return plain($children, $nestedPath);
         }
+    }, $data);
+    return $result;
+}
 
-    }, []);
-    print_r($onlyPath);
-
-
-
-
-
+function convertToString($data)
+{
+    if ($data === null|| is_bool($data)) {
+        return strtolower(var_export($data, true));
+    } elseif (is_array($data)) {
+        return "[complex value]";
+    } elseif (is_string($data) || is_double($data) || is_int($data)) {
+        return "'" . $data . "'";
+    }
+    return $data;
 }
