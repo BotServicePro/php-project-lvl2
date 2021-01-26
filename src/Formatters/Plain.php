@@ -28,13 +28,13 @@ function plain($data, $path)
         switch ($item['type']) {
             case 'added':
                 $stringedData = convertToString($item['value']);
-                return 'Property ' . "'" .$path . $item['key'] . "'" . ' was added with value: ' . $stringedData;
+                return 'Property ' . "'" . $path . $item['key'] . "'" . ' was added with value: ' . $stringedData;
             case 'removed':
                 return 'Property ' . "'" . $path . $item['key'] . "'" . " was removed";
             case 'changed':
                 $oldValue = convertToString($item['oldValue']);
                 $newValue = convertToString($item['newValue']);
-                return 'Property ' . "'" .$path . $item['key'] . "'" .
+                return 'Property ' . "'" . $path . $item['key'] . "'" .
                     " was updated. From " . $oldValue . ' to ' . $newValue;
             case 'unchanged':
                 return [];
@@ -49,7 +49,7 @@ function plain($data, $path)
 
 function convertToString($data)
 {
-    if ($data === null|| is_bool($data)) {
+    if ($data === null || is_bool($data)) {
         return strtolower(var_export($data, true));
     } elseif (is_array($data)) {
         return "[complex value]";
