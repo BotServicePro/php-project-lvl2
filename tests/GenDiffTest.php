@@ -45,5 +45,9 @@ class GenDiffTest extends TestCase
         $expected7 = file_get_contents($source);
         $this->assertEquals($expected7, genDiff('file1rec.yml', 'file2rec.yml', $format = 'plain'));
 
+        // Сравнение рекурсивных файлов json и yml в формате Json
+        $source = __DIR__ . "/fixtures/compareJsonRecursiveResult.txt";
+        $expected8 = file_get_contents($source);
+        $this->assertEquals($expected8, genDiff('file1rec.yml', 'file2rec.json', $format = 'json'));
     }
 }
