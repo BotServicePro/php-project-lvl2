@@ -22,22 +22,22 @@ class GenDiffTest extends TestCase
 
         // Сравнение простых yml и json
         $source = __DIR__ . "/fixtures/compareResult.txt";
-        $expected2 = file_get_contents($source);
-        $this->assertEquals($expected2, genDiff('file1.yml', 'file2.json', $format = 'stylish'));
+        $expected3 = file_get_contents($source);
+        $this->assertEquals($expected3, genDiff('file1.yml', 'file2.json', $format = 'stylish'));
 
         // Сравнение простых json и yml
         $source = __DIR__ . "/fixtures/compareResult.txt";
-        $expected2 = file_get_contents($source);
-        $this->assertEquals($expected2, genDiff('file1.json', 'file2.yml', $format = 'stylish'));
+        $expected4 = file_get_contents($source);
+        $this->assertEquals($expected4, genDiff('file1.json', 'file2.yml', $format = 'stylish'));
 
-//        // Сравнение рекурсивных json и json
-//        $source = __DIR__ . "/fixtures/compareRecursiveResult.txt";
-//        $expected2 = file_get_contents($source);
-//        $this->assertEquals($expected2, genDiff('file1rec.json', 'file2rec.json'));
-//
-//        // Сравнение рекурсивных yml и yml
-//        $source = __DIR__ . "/fixtures/compareRecursiveResult.txt";
-//        $expected2 = file_get_contents($source);
-//        $this->assertEquals($expected2, genDiff('file1rec.yml', 'file2rec.yml'));
+        // Сравнение рекурсивных json и json
+        $source = __DIR__ . "/fixtures/compareRecursiveResult.txt";
+        $expected5 = file_get_contents($source);
+        $this->assertEquals($expected5, genDiff('file1rec.json', 'file2rec.json', $format = 'stylish'));
+
+        // Сравнение рекурсивных yml и yml
+        $source = __DIR__ . "/fixtures/compareRecursiveResult.txt";
+        $expected6 = file_get_contents($source);
+        $this->assertEquals($expected6, genDiff('file1rec.yml', 'file2rec.yml', $format = 'stylish'));
     }
 }
