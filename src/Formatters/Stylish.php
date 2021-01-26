@@ -70,7 +70,6 @@ function stylish($data, $depth)
 
 function convertToString($data, $depth)
 {
-
     if ($data === null || is_bool($data)) {
         return strtolower(var_export($data, true));
     } elseif (is_string($data) || is_double($data) || is_int($data)) {
