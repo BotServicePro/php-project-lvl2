@@ -14,16 +14,6 @@ function render($data)
 
 function plain($data, $path)
 {
-    // сортируем если есть значения
-    if (array_key_exists('key', $data[0])) {
-        array_multisort(
-            array_column($data, 'key'),
-            SORT_ASC,
-            SORT_NATURAL + SORT_FLAG_CASE,
-            $data
-        );
-    }
-
     $result = array_map(function ($item) use ($path) {
         switch ($item['type']) {
             case 'added':
