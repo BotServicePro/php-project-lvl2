@@ -18,7 +18,7 @@
         },
         "files": [
             "src/GenDiff.php",
-            "src/Parser.php",
+            "src/FileExtractor.php",
             "src/Formatters.php",
             "src/Formatters/Plain.php",
             "src/Formatters/Stylish.php",
