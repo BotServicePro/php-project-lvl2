@@ -16,15 +16,6 @@ function render($data)
 
 function stylish($data, $depth)
 {
-    if (array_key_exists('key', $data[0])) {
-        array_multisort(
-            array_column($data, 'key'),
-            SORT_ASC,
-            SORT_NATURAL + SORT_FLAG_CASE,
-            $data
-        );
-    }
-
     $result = array_map(function ($item) use ($depth) {
         $plus = "  + ";
         $minus = "  - ";
@@ -40,26 +31,18 @@ function stylish($data, $depth)
                 $stringedData = convertToString($item['value'], $depth);
                 return $tabulation . $minus . $item['key'] . $doublePoint . $stringedData;
             case 'changed':
-                //конвертим старое значение
                 $oldValue = convertToString($item['oldValue'], $depth);
-                //конвертим новоe значние
                 $newValue = convertToString($item['newValue'], $depth);
-                // записываем в переменне с форматирование
                 $stringedNewValue = $tabulation . $plus . $item['key'] . $doublePoint . $newValue;
                 $stringedOldValue = $tabulation . $minus . $item['key'] . $doublePoint . $oldValue;
-                // возвращаем две новые строки
                 return $stringedOldValue . "\n" . $stringedNewValue;
             case 'unchanged':
                 $stringedData = convertToString($item['value'], $depth);
                 return $tabulation . $space . $item['key'] . $doublePoint . $stringedData;
             case 'nested':
-                // получаем то что вложено
                 $children = $item['children'];
-                // делаем первую строку с ключом и отступом
                 $stringedHeader = $tabulation . $space . $item['key'] . $doublePoint .  '{';
-                // тело данных, вызываем функцию рекурсивно с вложенными данными
                 $body = stylish($children, $depth + 1);
-                // пересобираем тело с новой строки
                 $stringedBody = implode("\n", $body);
                 return $stringedHeader . "\n" . $stringedBody . "\n" . $tabulation . $space . '}';
         }
