@@ -7,7 +7,7 @@ use Exception;
 use function Differ\Parser\dataExtractor;
 use function Differ\Formatters\formateIt;
 
-function filePathMaker($path)
+function makeFilePath($path)
 {
     if (!is_readable($path)) {
         $path = $_SERVER['DOCUMENT_ROOT'] . '../' . $path;
@@ -20,11 +20,11 @@ function filePathMaker($path)
 
 function genDiff($path1, $path2, $format)
 {
-    $path1 = filePathMaker($path1);
-    $path2 = filePathMaker($path2);
-    $firstFile = dataExtractor($path1); // получаем данные из файла в том виде в каком они есть
-    $secondFile = dataExtractor($path2); // получаем данные из файла в том виде в каком они есть
-    $differedData = diffData($firstFile, $secondFile); // получаем различия файлов и плоских и жирных
+    $path1 = makeFilePath($path1);
+    $path2 = makeFilePath($path2);
+    $firstFile = dataExtractor($path1);
+    $secondFile = dataExtractor($path2);
+    $differedData = diffData($firstFile, $secondFile);
     $finalFormattedResult = formateIt($differedData, $format);
     return $finalFormattedResult;
 }
