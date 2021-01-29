@@ -4,7 +4,7 @@ namespace Differ\GenDiff;
 
 use Exception;
 
-use function Differ\Parser\dataExtractor;
+use function Differ\Parser\extractData;
 use function Differ\Formatters\formateIt;
 
 function makeFilePath($path)
@@ -22,8 +22,8 @@ function genDiff($path1, $path2, $format)
 {
     $path1 = makeFilePath($path1);
     $path2 = makeFilePath($path2);
-    $firstFile = dataExtractor($path1);
-    $secondFile = dataExtractor($path2);
+    $firstFile = extractData($path1);
+    $secondFile = extractData($path2);
     $differedData = diffData($firstFile, $secondFile);
     $finalFormattedResult = formateIt($differedData, $format);
     return $finalFormattedResult;

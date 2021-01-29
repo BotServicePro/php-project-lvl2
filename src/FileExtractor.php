@@ -7,7 +7,7 @@ use Symfony\Component\Yaml\Yaml;
 const JSONEXTENSION = -4;
 const YMLEXTENSION = -3;
 
-function dataExtractor($fileName)
+function extractData($fileName)
 {
     if (substr($fileName, YMLEXTENSION) === 'yml') { // если это yml файлы
         $file = file_get_contents($fileName);
