@@ -7,15 +7,21 @@ use Exception;
 use function Differ\Parser\parserIt;
 use function Differ\Formatters\formateIt;
 
+function filePathMaker($path)
+{
+    if (!is_readable($path)) {
+        $path = $_SERVER['DOCUMENT_ROOT'] . '../' . $path;
+    }
+    if (!file_exists($path)) {
+        throw new Exception("First or second file not found. Wrong filepath is: $path");
+    }
+    return $path;
+}
+
 function genDiff($path1, $path2, $format)
 {
-    if (!is_readable($path1) || !is_readable($path2)) {
-        $path1 = $_SERVER['DOCUMENT_ROOT'] . '../' . $path1;
-        $path2 = $_SERVER['DOCUMENT_ROOT'] . '../' . $path2;
-    } elseif (!file_exists($path1) || !file_exists($path2)) {
-        throw new Exception("First or second file not found.");
-    }
-
+    $path1 = filePathMaker($path1);
+    $path2 = filePathMaker($path2);
     $firstFile = parserIt($path1); // получаем данные из файла в том виде в каком они есть
     $secondFile = parserIt($path2); // получаем данные из файла в том виде в каком они есть
     $differedData = diffData($firstFile, $secondFile); // получаем различия файлов и плоских и жирных
