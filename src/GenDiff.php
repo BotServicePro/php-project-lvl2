@@ -34,11 +34,10 @@ function diffData($firstFile, $secondFile)
     $firstFile = json_decode(json_encode($firstFile), true);
     $secondFile = json_decode(json_encode($secondFile), true);
     $uniqueKeys = array_keys(array_merge($firstFile, $secondFile));
+    sort($uniqueKeys, SORT_NATURAL);
     $data = array_map(function ($key) use ($firstFile, $secondFile) {
-        // если текущий ключ не существует в первом файле, но присутствует во втором
         if (!array_key_exists($key, $firstFile)) {
             return ['key' => $key, 'value' => $secondFile[$key], 'type' => 'added'];
-        // если текущего ключа нет во втором файле, (логично что он есть в первом)
         } elseif (!array_key_exists($key, $secondFile)) {
             return ['key' => $key, 'value' => $firstFile[$key], 'type' => 'removed'];
         }
@@ -46,11 +45,7 @@ function diffData($firstFile, $secondFile)
         $nodeSecond = $secondFile[$key];
         if (is_array($nodeFirst) === true && is_array($nodeSecond) === true) {
             $children = diffData($nodeFirst, $nodeSecond);
-            // возможно придеться поменять  c type на status, что бы было легче перебирать в цикле
             $arr = ['key' => $key, 'type' => 'nested', 'children' => $children];
-            usort($arr['children'], function ($a, $b) {
-                return substr($a['key'], 0, 1) <=> substr($b['key'], 0, 1);
-            });
             return $arr;
         }
         if ($nodeFirst === $nodeSecond) {
