@@ -5,7 +5,7 @@ namespace Differ\GenDiff;
 use Exception;
 
 use function Differ\Parser\extractData;
-use function Differ\Formatters\formateIt;
+use function Differ\Formatters\astToStringConverter;
 
 function makeFilePath($path)
 {
@@ -25,7 +25,7 @@ function genDiff($path1, $path2, $format)
     $firstFile = extractData($path1);
     $secondFile = extractData($path2);
     $differedData = diffData($firstFile, $secondFile);
-    $finalFormattedResult = formateIt($differedData, $format);
+    $finalFormattedResult = astToStringConverter($differedData, $format);
     return $finalFormattedResult;
 }
 
