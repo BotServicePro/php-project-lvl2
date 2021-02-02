@@ -38,7 +38,8 @@ function diffData($firstFile, $secondFile)
     $data = array_map(function ($key) use ($firstFile, $secondFile) {
         if (!array_key_exists($key, $firstFile)) {
             return ['key' => $key, 'value' => $secondFile[$key], 'type' => 'added'];
-        } elseif (!array_key_exists($key, $secondFile)) {
+        }
+        if (!array_key_exists($key, $secondFile)) {
             return ['key' => $key, 'value' => $firstFile[$key], 'type' => 'removed'];
         }
         $nodeFirst = $firstFile[$key];
@@ -50,7 +51,8 @@ function diffData($firstFile, $secondFile)
         }
         if ($nodeFirst === $nodeSecond) {
             return  ['key' => $key, 'value' => $nodeFirst, 'type' => 'unchanged'];
-        } else {
+        }
+        if ($nodeFirst !== $nodeSecond) {
             return ['key' => $key, 'oldValue' => $nodeFirst, 'newValue' => $nodeSecond, 'type' => 'changed'];
         }
     }, $uniqueKeys);
