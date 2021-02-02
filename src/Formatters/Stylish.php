@@ -5,40 +5,35 @@ namespace Differ\Formatters\Stylish;
 function stylish($data, $depth)
 {
     $result = array_map(function ($item) use ($depth) {
-        $plus = "  + ";
-        $minus = "  - ";
-        $space = "    ";
-        $doublePoint = ": ";
         $tabulation = str_repeat('    ', $depth - 1);
         switch ($item['type']) {
             case 'added':
-                $stringedData = convertToString($item['value'], $depth);
-                return $tabulation . $plus . $item['key'] . $doublePoint . $stringedData;
+                $stringedData = stringedData($item['value'], $depth);
+                return "$tabulation  + {$item['key']}: $stringedData";
             case 'removed':
-                $stringedData = convertToString($item['value'], $depth);
-                return $tabulation . $minus . $item['key'] . $doublePoint . $stringedData;
+                $stringedData = stringedData($item['value'], $depth);
+                return "$tabulation  - {$item['key']}: $stringedData";
             case 'changed':
-                $oldValue = convertToString($item['oldValue'], $depth);
-                $newValue = convertToString($item['newValue'], $depth);
-                $stringedNewValue = $tabulation . $plus . $item['key']  . $doublePoint . $newValue;
-                $stringedOldValue = $tabulation . $minus . $item['key'] . $doublePoint . $oldValue;
+                $oldValue = stringedData($item['oldValue'], $depth);
+                $newValue = stringedData($item['newValue'], $depth);
+                $stringedNewValue = "$tabulation  + {$item['key']}: $newValue";
+                $stringedOldValue = "$tabulation  - {$item['key']}: $oldValue";
                 return $stringedOldValue . "\n" . $stringedNewValue;
             case 'unchanged':
-                $stringedData = convertToString($item['value'], $depth);
-                return $tabulation . $space . $item['key'] . $doublePoint . $stringedData;
+                $stringedData = stringedData($item['value'], $depth);
+                return "$tabulation    {$item['key']}: $stringedData";
             case 'nested':
                 $children = $item['children'];
-                $stringedHeader = $tabulation . $space . $item['key'] . $doublePoint .  '{';
+                $stringedHeader = "$tabulation    {$item['key']}: {";
                 $body = stylish($children, $depth + 1);
                 $stringedBody = implode("\n", $body);
-                return $stringedHeader . "\n" . $stringedBody . "\n" . $tabulation . $space . '}';
+                return "{$stringedHeader}\n{$stringedBody}\n{$tabulation}    }";
         }
     }, $data);
-
     return $result;
 }
 
-function convertToString($data, $depth)
+function stringedData($data, $depth)
 {
     if (is_object($data)) {
         $data = (array) $data;
@@ -55,24 +50,24 @@ function convertToString($data, $depth)
     $space = '    ';
     $tabulation = str_repeat($space, $depth);
     $string = '';
-    $stringedData = array_map(function ($key, $value) use ($depth, $tabulation, $space, $string) {
+    $stringedData = array_map(function ($key, $value) use ($depth, $space, $tabulation, $string) {
         if (is_object($value)) {
             $value = (array) $value;
-            $stringedValue = convertToString($value, $depth + 1);
-            return $tabulation . $space . $key . ': ' . $stringedValue;
+            $stringedValue = stringedData($value, $depth + 1);
+            return "{$tabulation}{$space}{$key}: $stringedValue";
         }
         if (!is_array($value) && !is_object($value)) {
-            return $tabulation . $space . $key . ': ' . $value;
+            return "{$tabulation}{$space}{$key}: $value";
         }
         if (is_array($value) && is_array($value[key($value)])) {
-            $stringed = convertToString($value, $depth + 1);
-            return $tabulation . $space . $key . ': ' . $stringed;
+            $stringed = stringedData($value, $depth + 1);
+            return "{$tabulation}{$space}{$key}: $stringed";
         }
         if (is_array($value) && !is_array($value[key($value)])) {
-            $stringed2 = convertToString($value, $depth + 1);
-            return $string . "\n" . $tabulation . $space . $key . ': ' . $stringed2;
+            $stringed2 = stringedData($value, $depth + 1);
+            return "{$string}\n{$tabulation}{$space}{$key}: $stringed2";
         }
     }, array_keys($data), $data);
     $stringedData = implode("\n", $stringedData);
-    return "{" . "\n" . $stringedData . "\n" . $tabulation . "}";
+    return "{\n{$stringedData}\n{$tabulation}}";
 }
