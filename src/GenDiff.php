@@ -59,17 +59,3 @@ function diffData($firstFile, $secondFile)
     return $data;
 }
 
-//function sortKeys($data)
-//{
-//    if (is_object($data)) {
-//        $data = (array) $data;
-//        $uniqueKeys = array_keys($data);
-//        sort($uniqueKeys, SORT_NATURAL);
-//        $result = array_map(function ($key) use ($data) {
-//            return ['key' => $key, 'value' => $data[$key], 'type' => 'added'];
-//        }, $uniqueKeys);
-//        return $result;
-//    } else {
-//        return $data;
-//    }
-//}
