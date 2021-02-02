@@ -24,6 +24,7 @@ function astToStringConverter($data, $type)
             print_r($formatedData);
             return $formatedData;
         case 'json':
+            print_r(json($data));
             return json($data);
     }
 }
