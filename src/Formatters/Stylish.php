@@ -8,10 +8,6 @@ function stylish($data, $depth)
         $tabulation = str_repeat('    ', $depth - 1);
         switch ($item['type']) {
             case 'added':
-//                if (is_object($item['value'])) {
-//                    print_r($item['value']);
-//                }
-                //
                 $stringedData = stringedData($item['value'], $depth);
                 return "$tabulation  + {$item['key']}: $stringedData";
             case 'removed':
@@ -41,12 +37,6 @@ function stringedData($data, $depth)
 {
     if (is_object($data)) {
         $data = (array) $data;
-//        $keys = array_keys($data);
-//        $sortedKeys = sort($keys, SORT_NATURAL);
-//        $sortedResult = array_map(function ($value) {
-//            print_r($value);
-//            echo '-----';
-//        }, $data);
     }
     if ($data === null || is_bool($data)) {
         return strtolower(var_export($data, true));
