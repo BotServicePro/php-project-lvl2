@@ -37,8 +37,11 @@ function stringedData($data)
     if (is_array($data)) {
         return "[complex value]";
     }
-    if (is_string($data) || is_double($data) || is_int($data)) {
+    if (is_string($data)) {
         return "'{$data}'";
+    }
+    if (is_double($data) || is_int($data)){
+        return "{$data}";
     }
     if (is_object($data)) {
         return "[complex value]";
