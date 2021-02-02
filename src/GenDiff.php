@@ -36,7 +36,12 @@ function diffData($firstFile, $secondFile)
     sort($uniqueKeys, SORT_NATURAL);
     $data = array_map(function ($key) use ($firstFile, $secondFile) {
         if (!array_key_exists($key, $firstFile)) {
-            return ['key' => $key, 'value' => $secondFile[$key], 'type' => 'added'];
+            if (is_object($secondFile[$key])) {
+                $result = keySorter($secondFile[$key]);
+                return ['key' => $key, 'value' => $result, 'type' => 'added'];
+            } else {
+                return ['key' => $key, 'value' => $secondFile[$key], 'type' => 'added'];
+            }
         }
         if (!array_key_exists($key, $secondFile)) {
             return ['key' => $key, 'value' => $firstFile[$key], 'type' => 'removed'];
@@ -56,4 +61,16 @@ function diffData($firstFile, $secondFile)
         }
     }, $uniqueKeys);
     return $data;
+}
+
+function keySorter($data)
+{
+    $value = (array) $data;
+    $keys = array_keys($value);
+    sort($keys, SORT_NATURAL);
+    $result = array_reduce($keys, function ($acc, $key) use ($value) {
+        $acc[$key] = $value[$key];
+        return $acc;
+    }, []);
+    return $result;
 }
