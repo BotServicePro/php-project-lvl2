@@ -45,6 +45,8 @@ function convertToString($data)
         return "[complex value]";
     } elseif (is_string($data) || is_double($data) || is_int($data)) {
         return "'" . $data . "'";
+    } elseif (is_object($data)) {
+        return "[complex value]";
     }
     return $data;
 }
