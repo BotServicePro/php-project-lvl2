@@ -8,54 +8,51 @@ use function Differ\GenDiff\genDiff;
 
 class GenDiffTest extends TestCase
 {
-    public function testGenDiff()
+    private function dir($filename)
     {
-        $path = 'tests/fixtures/';
+        return "tests/fixtures/$filename";
+    }
 
-        // Сравнение двух простых json
-        $source = __DIR__ . "/fixtures/compareResult.txt";
+    public function testGenDiffJsonToJsonFormatStylish()
+    {
+        $source = __DIR__ . "/fixtures/compareStylishRecursiveResult.txt";
         $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff($path . 'file1.json', $path . 'file2.json', $format = 'stylish'));
-
-        // Сравнение двух простых yml
-        $source = __DIR__ . "/fixtures/compareResult.txt";
-        $expected2 = file_get_contents($source);
-        $this->assertEquals($expected2, genDiff($path . 'file1.yml', $path . '/file2.yml', $format = 'stylish'));
-
-        // Сравнение простых yml и json
-        $source = __DIR__ . "/fixtures/compareResult.txt";
-        $expected3 = file_get_contents($source);
-        $this->assertEquals($expected3, genDiff($path . 'file1.yml', $path . 'file2.json', $format = 'stylish'));
-
-        // Сравнение простых json и yml
-        $source = __DIR__ . "/fixtures/compareResult.txt";
-        $expected4 = file_get_contents($source);
-        $this->assertEquals($expected4, genDiff($path . 'file1.json', $path . 'file2.yml', $format = 'stylish'));
-
-        // Сравнение рекурсивных json и json
-        $source = __DIR__ . "/fixtures/compareRecursiveResultStylish.txt";
+        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.json'), 'stylish'));
+    }
+    public function testGenDiffJsonToJsonFormatPlain()
+    {
+        $source = __DIR__ . "/fixtures/comparePlainRecursiveResult.txt";
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.json'), 'plain'));
+    }
+    public function testGenDiffYamlToYamlFormatStylish()
+    {
+        $source = __DIR__ . "/fixtures/compareStylishRecursiveResult.txt";
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff(self::dir('file1rec.yml'), self::dir('file2rec.yml'), 'stylish'));
+    }
+    public function testGenDiffJsonToYamlFormatPlain()
+    {
+        $source = __DIR__ . "/fixtures/comparePlainRecursiveResult.txt";
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.yml'), 'plain'));
+    }
+    public function testGenDiffJsonToYamlFormatStylish()
+    {
+        $source = __DIR__ . "/fixtures/compareStylishRecursiveResult.txt";
         $expected5 = file_get_contents($source);
-        $this->assertEquals($expected5, genDiff($path . 'file1rec.json', $path . 'file2rec.json', $format = 'stylish'));
-
-        // Сравнение рекурсивных yml и yml
-        $source = __DIR__ . "/fixtures/compareRecursiveResultStylish.txt";
-        $expected6 = file_get_contents($source);
-        $this->assertEquals($expected6, genDiff($path . 'file1rec.yml', $path . 'file2rec.yml', $format = 'stylish'));
-
-        // Сравнение рекурсивных файлов yml и yml в формате Plain
-        $source = __DIR__ . "/fixtures/compareRecursiveResultPlain.txt";
-        $expected7 = file_get_contents($source);
-        $this->assertEquals($expected7, genDiff($path . 'file1rec.yml', $path . 'file2rec.yml', $format = 'plain'));
-
-        // Сравнение рекурсивных файлов yml и json в формате Json
+        $this->assertEquals($expected5, genDiff(self::dir('file1rec.json'), self::dir('file2rec.yml'), 'stylish'));
+    }
+    public function testGenDiffJsonToJsonFormatJson()
+    {
         $source = __DIR__ . "/fixtures/compareJsonRecursiveResult.txt";
-        $expected8 = file_get_contents($source);
-        $this->assertEquals($expected8, genDiff($path . 'file1rec.yml', $path . 'file2rec.json', $format = 'json'));
-
-        // Сравнение рекурсивных файлов по хекслету
-        $source = __DIR__ . "/fixtures/hexletResult.txt";
-        $expected9 = file_get_contents($source);
-        $this->assertEquals($expected9, genDiff($path . 'hexletFile1.json', $path .
-            'hexletFile2.json', $format = 'stylish'));
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.json'), 'json'));
+    }
+    public function testGenDiffJsonToYamlFormatJson()
+    {
+        $source = __DIR__ . "/fixtures/compareJsonRecursiveResult.txt";
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.yml'), 'json'));
     }
 }
