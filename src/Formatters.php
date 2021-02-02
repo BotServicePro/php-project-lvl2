@@ -8,11 +8,12 @@ use function Differ\Formatters\Json\render as json;
 
 function astToStringConverter($data, $type)
 {
-    if ($type === 'stylish') {
-        return stylish($data);
-    } elseif ($type === 'plain') {
-        return plain($data);
-    } elseif ($type === 'json') {
-        return json($data);
+    switch ($type) {
+        case 'stylish':
+            return stylish($data);
+        case 'plain':
+            return plain($data);
+        case 'json':
+            return json($data);
     }
 }
