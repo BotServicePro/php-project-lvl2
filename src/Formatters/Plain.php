@@ -7,13 +7,13 @@ function plain($data, $path)
     $result = array_map(function ($item) use ($path) {
         switch ($item['type']) {
             case 'added':
-                $stringedData = convertToString($item['value']);
+                $stringedData = stringedData($item['value']);
                 return 'Property ' . "'" . $path . $item['key'] . "'" . ' was added with value: ' . $stringedData;
             case 'removed':
                 return 'Property ' . "'" . $path . $item['key'] . "'" . " was removed";
             case 'changed':
-                $oldValue = convertToString($item['oldValue']);
-                $newValue = convertToString($item['newValue']);
+                $oldValue = stringedData($item['oldValue']);
+                $newValue = stringedData($item['newValue']);
                 return 'Property ' . "'" . $path . $item['key'] . "'" .
                     " was updated. From " . $oldValue . ' to ' . $newValue;
             case 'unchanged':
@@ -27,15 +27,21 @@ function plain($data, $path)
     return $result;
 }
 
-function convertToString($data)
+function stringedData($data)
 {
-    if ($data === null || is_bool($data)) {
+    if ($data === null) {
         return strtolower(var_export($data, true));
-    } elseif (is_array($data)) {
+    }
+    if (is_bool($data)) {
+        return var_export($data, true);
+    }
+    if (is_array($data)) {
         return "[complex value]";
-    } elseif (is_string($data) || is_double($data) || is_int($data)) {
+    }
+    if (is_string($data) || is_double($data) || is_int($data)) {
         return "'" . $data . "'";
-    } elseif (is_object($data)) {
+    }
+    if (is_object($data)) {
         return "[complex value]";
     }
     return $data;
