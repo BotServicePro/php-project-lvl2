@@ -8,18 +8,17 @@ function plain($data, $path)
         switch ($item['type']) {
             case 'added':
                 $stringedData = stringedData($item['value']);
-                return 'Property ' . "'" . $path . $item['key'] . "'" . ' was added with value: ' . $stringedData;
+                return "Property '{$path}{$item['key']}' was added with value: $stringedData";
             case 'removed':
-                return 'Property ' . "'" . $path . $item['key'] . "'" . " was removed";
+                return "Property '{$path}{$item['key']}' was removed";
             case 'changed':
                 $oldValue = stringedData($item['oldValue']);
                 $newValue = stringedData($item['newValue']);
-                return 'Property ' . "'" . $path . $item['key'] . "'" .
-                    " was updated. From " . $oldValue . ' to ' . $newValue;
+                return "Property '{$path}{$item['key']}' was updated. From $oldValue to $newValue";
             case 'unchanged':
                 return [];
             case 'nested':
-                $nestedPath = $path . $item['key'] . '.';
+                $nestedPath = "{$path}{$item['key']}.";
                 $children = $item['children'];
                 return plain($children, $nestedPath);
         }
@@ -39,7 +38,7 @@ function stringedData($data)
         return "[complex value]";
     }
     if (is_string($data) || is_double($data) || is_int($data)) {
-        return "'" . $data . "'";
+        return "'{$data}'";
     }
     if (is_object($data)) {
         return "[complex value]";
