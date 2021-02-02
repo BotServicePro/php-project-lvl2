@@ -40,12 +40,12 @@ function stringedData($data, $depth)
 {
     if (is_object($data)) {
         $data = (array) $data;
-        $keys = array_keys($data);
-        $sortedKeys = sort($keys, SORT_NATURAL);
-        $sortedResult = array_map(function ($value) {
-            print_r($value);
-            echo '-----';
-        }, $data);
+//        $keys = array_keys($data);
+//        $sortedKeys = sort($keys, SORT_NATURAL);
+//        $sortedResult = array_map(function ($value) {
+//            print_r($value);
+//            echo '-----';
+//        }, $data);
 
     }
     if ($data === null || is_bool($data)) {
