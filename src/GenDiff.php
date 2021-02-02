@@ -31,8 +31,8 @@ function genDiff($path1, $path2, $format)
 
 function diffData($firstFile, $secondFile)
 {
-    $firstFile = json_decode(json_encode($firstFile), true);
-    $secondFile = json_decode(json_encode($secondFile), true);
+    $firstFile = (array) $firstFile;
+    $secondFile = (array) $secondFile;
     $uniqueKeys = array_keys(array_merge($firstFile, $secondFile));
     sort($uniqueKeys, SORT_NATURAL);
     $data = array_map(function ($key) use ($firstFile, $secondFile) {
@@ -43,7 +43,7 @@ function diffData($firstFile, $secondFile)
         }
         $nodeFirst = $firstFile[$key];
         $nodeSecond = $secondFile[$key];
-        if (is_array($nodeFirst) === true && is_array($nodeSecond) === true) {
+        if (is_object($nodeFirst) === true && is_object($nodeSecond) === true) {
             $children = diffData($nodeFirst, $nodeSecond);
             $arr = ['key' => $key, 'type' => 'nested', 'children' => $children];
             return $arr;
