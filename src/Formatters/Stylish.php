@@ -46,7 +46,6 @@ function stringedData($data, $depth)
 //            print_r($value);
 //            echo '-----';
 //        }, $data);
-
     }
     if ($data === null || is_bool($data)) {
         return strtolower(var_export($data, true));

@@ -40,7 +40,7 @@ function stringedData($data)
     if (is_string($data)) {
         return "'{$data}'";
     }
-    if (is_double($data) || is_int($data)){
+    if (is_double($data) || is_int($data)) {
         return "{$data}";
     }
     if (is_object($data)) {

@@ -58,4 +58,3 @@ function diffData($firstFile, $secondFile)
     }, $uniqueKeys);
     return $data;
 }
-
