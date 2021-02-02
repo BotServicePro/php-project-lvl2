@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Parser;
+namespace Differ\FileExtractor;
 
 use Symfony\Component\Yaml\Yaml;
 
