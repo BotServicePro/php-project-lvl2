@@ -25,8 +25,7 @@ function genDiff($path1, $path2, $format)
     $firstFile = extractData($path1);
     $secondFile = extractData($path2);
     $differedData = diffData($firstFile, $secondFile);
-    $finalFormattedResult = astToStringConverter($differedData, $format);
-    return $finalFormattedResult;
+    return astToStringConverter($differedData, $format);
 }
 
 function diffData($firstFile, $secondFile)
