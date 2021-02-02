@@ -15,7 +15,7 @@ function extractData($fileName)
     }
     if (substr($fileName, JSONEXTENSION) === 'json') { // если это json
         $file = file_get_contents($fileName);
-        $data = json_decode($file, $associative = true);
+        $data = json_decode($file);
     }
     return $data;
 }
