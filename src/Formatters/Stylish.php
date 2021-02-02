@@ -11,6 +11,7 @@ function stylish($data, $depth)
 //                if (is_object($item['value'])) {
 //                    print_r($item['value']);
 //                }
+                //
                 $stringedData = stringedData($item['value'], $depth);
                 return "$tabulation  + {$item['key']}: $stringedData";
             case 'removed':
