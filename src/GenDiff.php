@@ -58,3 +58,18 @@ function diffData($firstFile, $secondFile)
     }, $uniqueKeys);
     return $data;
 }
+
+//function sortKeys($data)
+//{
+//    if (is_object($data)) {
+//        $data = (array) $data;
+//        $uniqueKeys = array_keys($data);
+//        sort($uniqueKeys, SORT_NATURAL);
+//        $result = array_map(function ($key) {
+//            echo 'xxxxx';
+//        } ,$uniqueKeys);
+//        return $result;
+//    } else {
+//        return $data;
+//    }
+//}
