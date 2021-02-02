@@ -57,9 +57,11 @@ function convertToString($data, $depth)
     }
     if ($data === null || is_bool($data)) {
         return strtolower(var_export($data, true));
-    } elseif (is_string($data) || is_double($data) || is_int($data)) {
+    }
+    if (is_string($data) || is_double($data) || is_int($data)) {
         return var_export($data, true);
-    } elseif (!is_array($data)) {
+    }
+    if (!is_array($data)) {
         return var_export($data, true);
     }
     $space = '    ';
