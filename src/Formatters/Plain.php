@@ -2,16 +2,6 @@
 
 namespace Differ\Formatters\Plain;
 
-use function Funct\Collection\flattenAll;
-
-function render($data)
-{
-    $stringedData = plain($data, '');
-    $formatedData = implode("\n", flattenAll($stringedData));
-    print_r($formatedData);
-    return $formatedData;
-}
-
 function plain($data, $path)
 {
     $result = array_map(function ($item) use ($path) {
