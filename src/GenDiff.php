@@ -22,32 +22,32 @@ function genDiff($path1, $path2, $format = 'stylish')
 {
     $path1 = makeFilePath($path1);
     $path2 = makeFilePath($path2);
-    $firstFile = extractData($path1);
-    $secondFile = extractData($path2);
-    $differedData = diffData($firstFile, $secondFile);
+    $firstaData = extractData($path1);
+    $secondData = extractData($path2);
+    $differedData = diffData($firstaData, $secondData);
     return astToStringConverter($differedData, $format);
 }
 
-function diffData($firstFile, $secondFile)
+function diffData($firstaData, $secondData)
 {
-    $firstFile = (array) $firstFile;
-    $secondFile = (array) $secondFile;
-    $uniqueKeys = array_keys(array_merge($firstFile, $secondFile));
+    $firstaData = (array) $firstaData;
+    $secondData = (array) $secondData;
+    $uniqueKeys = array_keys(array_merge($firstaData, $secondData));
     sort($uniqueKeys, SORT_NATURAL);
-    $data = array_map(function ($key) use ($firstFile, $secondFile) {
-        if (!array_key_exists($key, $firstFile)) {
-            if (is_object($secondFile[$key])) {
-                $result = keySorter($secondFile[$key]);
+    $data = array_map(function ($key) use ($firstaData, $secondData) {
+        if (!array_key_exists($key, $firstaData)) {
+            if (is_object($secondData[$key])) {
+                $result = keySorter($secondData[$key]);
                 return ['key' => $key, 'value' => $result, 'type' => 'added'];
             } else {
-                return ['key' => $key, 'value' => $secondFile[$key], 'type' => 'added'];
+                return ['key' => $key, 'value' => $secondData[$key], 'type' => 'added'];
             }
         }
-        if (!array_key_exists($key, $secondFile)) {
-            return ['key' => $key, 'value' => $firstFile[$key], 'type' => 'removed'];
+        if (!array_key_exists($key, $secondData)) {
+            return ['key' => $key, 'value' => $firstaData[$key], 'type' => 'removed'];
         }
-        $nodeFirst = $firstFile[$key];
-        $nodeSecond = $secondFile[$key];
+        $nodeFirst = $firstaData[$key];
+        $nodeSecond = $secondData[$key];
         if (is_object($nodeFirst) === true && is_object($nodeSecond) === true) {
             $children = diffData($nodeFirst, $nodeSecond);
             $arr = ['key' => $key, 'type' => 'nested', 'children' => $children];
