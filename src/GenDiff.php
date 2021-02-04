@@ -4,7 +4,7 @@ namespace Differ\GenDiff;
 
 use Exception;
 
-use function Differ\FileExtractor\extractData;
+use function Differ\Parsers\extractData;
 use function Differ\Formatters\astToStringConverter;
 
 function makeFilePath($path)
