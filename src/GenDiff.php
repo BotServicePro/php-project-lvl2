@@ -35,7 +35,7 @@ function diffData($firstData, $secondData)
     $keysFromFirstData = array_keys(get_object_vars($firstData));
     $keysFromSecondData = array_keys(get_object_vars($secondData));
     $uniqueKeys = union($keysFromFirstData, $keysFromSecondData);
-    $uniqueKeys = array_values(sortBy($uniqueKeys, function ($key) {
+    $sortedKeys = array_values(sortBy($uniqueKeys, function ($key) {
         return $key;
     }));
     $firstData = (array) $firstData;
@@ -65,7 +65,7 @@ function diffData($firstData, $secondData)
         if ($nodeFirst !== $nodeSecond) {
             return ['key' => $key, 'oldValue' => $nodeFirst, 'newValue' => $nodeSecond, 'type' => 'changed'];
         }
-    }, $uniqueKeys);
+    }, $sortedKeys);
     return $data;
 }
 
