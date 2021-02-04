@@ -18,7 +18,7 @@ function makeFilePath($path)
     return $path;
 }
 
-function genDiff($path1, $path2, $format)
+function genDiff($path1, $path2, $format = 'stylish')
 {
     $path1 = makeFilePath($path1);
     $path2 = makeFilePath($path2);
