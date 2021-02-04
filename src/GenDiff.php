@@ -24,7 +24,7 @@ function genDiff($path1, $path2, $format)
 {
     $path1 = makeFilePath($path1);
     $path2 = makeFilePath($path2);
-    $firstData= extractData($path1);
+    $firstData = extractData($path1);
     $secondData = extractData($path2);
     $differedData = diffData($firstData, $secondData);
     return astToStringConverter($differedData, $format);
@@ -71,10 +71,12 @@ function diffData($firstData, $secondData)
 
 function keySorter($data)
 {
-    $value = (array) $data;
+    $value = get_object_vars($data);
     $keys = array_keys($value);
-    sort($keys, SORT_NATURAL);
-    $result = array_reduce($keys, function ($acc, $key) use ($value) {
+        $sortedKeys = array_values(sortBy($keys, function ($key) {
+            return $key;
+        }));
+    $result = array_reduce($sortedKeys, function ($acc, $key) use ($value) {
         $acc[$key] = $value[$key];
         return $acc;
     }, []);
