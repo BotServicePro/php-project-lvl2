@@ -38,26 +38,26 @@ function buildTree($firstData, $secondData)
     $sortedKeys = array_values(sortBy($uniqueKeys, function ($key) {
         return $key;
     }));
-    $firstData = (array) $firstData;
-    $secondData = (array) $secondData;
+
     $data = array_map(function ($key) use ($firstData, $secondData) {
-        if (!array_key_exists($key, $firstData)) {
-            if (is_object($secondData[$key])) {
-                $result = keySorter($secondData[$key]);
-                return ['key' => $key, 'value' => $result, 'type' => 'added'];
-            } else {
-                return ['key' => $key, 'value' => $secondData[$key], 'type' => 'added'];
-            }
+        if (!property_exists($secondData, $key)) {
+            print_r(['key' => $key, 'value' => $firstData->$key, 'type' => 'removed']);
+            return ['key' => $key, 'value' => $firstData->$key, 'type' => 'removed'];
         }
-        if (!array_key_exists($key, $secondData)) {
-            return ['key' => $key, 'value' => $firstData[$key], 'type' => 'removed'];
+        if (!property_exists($firstData, $key)) {
+            print_r(['key' => $key, 'value' => $secondData->$key, 'type' => 'added']);
+            return ['key' => $key, 'value' => $secondData->$key, 'type' => 'added'];
         }
-        $nodeFirst = $firstData[$key];
-        $nodeSecond = $secondData[$key];
+        $nodeFirst = $firstData->$key;
+        $nodeSecond = $secondData->$key;
         if (is_object($nodeFirst) && is_object($nodeSecond)) {
-            $children = buildTree($nodeFirst, $nodeSecond);
-            $arr = ['key' => $key, 'type' => 'nested', 'children' => $children];
-            return $arr;
+
+            //print_r(['key' => $key, 'type' => 'nested', 'children' => buildTree($nodeFirst, $nodeSecond)]);
+
+
+
+
+            return ['key' => $key, 'type' => 'nested', 'children' => buildTree($nodeFirst, $nodeSecond)];
         }
         if ($nodeFirst === $nodeSecond) {
             return  ['key' => $key, 'value' => $nodeFirst, 'type' => 'unchanged'];
@@ -69,16 +69,10 @@ function buildTree($firstData, $secondData)
     return $data;
 }
 
-function keySorter($data)
-{
-    $value = get_object_vars($data);
-    $keys = array_keys($value);
-        $sortedKeys = array_values(sortBy($keys, function ($key) {
-            return $key;
-        }));
-    $result = array_reduce($sortedKeys, function ($acc, $key) use ($value) {
-        $acc[$key] = $value[$key];
-        return $acc;
-    }, []);
-    return $result;
-}
+//function sortKeys($data)
+//{
+//    $sortedKeys = array_values(sortBy($data, function ($key) {
+//        return $key;
+//    }));
+//    return $sortedKeys;
+//}
