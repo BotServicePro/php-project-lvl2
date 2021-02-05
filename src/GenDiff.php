@@ -20,7 +20,7 @@ function makeFilePath($path)
     return $path;
 }
 
-function genDiff($path1, $path2, $format)
+function genDiff($path1, $path2, $format = 'stylish')
 {
     $path1 = makeFilePath($path1);
     $path2 = makeFilePath($path2);
@@ -35,7 +35,7 @@ function buildTree($firstData, $secondData)
     $keysFromFirstData = array_keys(get_object_vars($firstData));
     $keysFromSecondData = array_keys(get_object_vars($secondData));
     $uniqueKeys = union($keysFromFirstData, $keysFromSecondData);
-    $sortedKeys = array_values(sortBy($uniqueKeys, function ($key) {
+    $sortedUniqueKeys = array_values(sortBy($uniqueKeys, function ($key) {
         return $key;
     }));
 
@@ -56,7 +56,7 @@ function buildTree($firstData, $secondData)
             return ['key' => $key, 'oldValue' => $nodeFirst, 'newValue' => $nodeSecond, 'type' => 'changed'];
         }
         return  ['key' => $key, 'value' => $nodeFirst, 'type' => 'unchanged'];
-    }, $sortedKeys);
+    }, $sortedUniqueKeys);
     return $data;
 }
 
