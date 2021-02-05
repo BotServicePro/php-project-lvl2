@@ -26,11 +26,11 @@ function genDiff($path1, $path2, $format)
     $path2 = makeFilePath($path2);
     $firstData = extractData($path1);
     $secondData = extractData($path2);
-    $differedData = diffData($firstData, $secondData);
+    $differedData = buildTree($firstData, $secondData);
     return astToStringConverter($differedData, $format);
 }
 
-function diffData($firstData, $secondData)
+function buildTree($firstData, $secondData)
 {
     $keysFromFirstData = array_keys(get_object_vars($firstData));
     $keysFromSecondData = array_keys(get_object_vars($secondData));
@@ -55,7 +55,7 @@ function diffData($firstData, $secondData)
         $nodeFirst = $firstData[$key];
         $nodeSecond = $secondData[$key];
         if (is_object($nodeFirst) && is_object($nodeSecond)) {
-            $children = diffData($nodeFirst, $nodeSecond);
+            $children = buildTree($nodeFirst, $nodeSecond);
             $arr = ['key' => $key, 'type' => 'nested', 'children' => $children];
             return $arr;
         }
