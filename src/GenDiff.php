@@ -52,12 +52,10 @@ function buildTree($firstData, $secondData)
         if (is_object($nodeFirst) && is_object($nodeSecond)) {
             return ['key' => $key, 'type' => 'nested', 'children' => buildTree($nodeFirst, $nodeSecond)];
         }
-        if ($nodeFirst === $nodeSecond) {
-            return  ['key' => $key, 'value' => $nodeFirst, 'type' => 'unchanged'];
-        }
         if ($nodeFirst !== $nodeSecond) {
             return ['key' => $key, 'oldValue' => $nodeFirst, 'newValue' => $nodeSecond, 'type' => 'changed'];
         }
+        return  ['key' => $key, 'value' => $nodeFirst, 'type' => 'unchanged'];
     }, $sortedKeys);
     return $data;
 }
