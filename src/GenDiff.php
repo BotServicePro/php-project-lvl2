@@ -11,12 +11,10 @@ use function Funct\Collection\union;
 
 function makeFilePath($path)
 {
-    if (!is_readable($path)) {
-        $path = $_SERVER['DOCUMENT_ROOT'] . '../' . $path;
-    }
     if (!file_exists($path)) {
         throw new Exception("First or second file not found. Wrong filepath is: $path");
     }
+    //$path = $_SERVER['DOCUMENT_ROOT'] . '../' . $path;
     return $path;
 }
 
