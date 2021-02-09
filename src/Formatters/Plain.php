@@ -2,6 +2,16 @@
 
 namespace Differ\Formatters\Plain;
 
+use function Funct\Collection\flattenAll;
+
+function render($tree)
+{
+    $path = '';
+    $stringedTree = plain($tree, $path);
+    $formatedData = implode("\n", flattenAll($stringedTree));
+    return $formatedData;
+}
+
 function plain($data, $path)
 {
     $result = array_map(function ($item) use ($path) {
