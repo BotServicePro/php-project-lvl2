@@ -8,51 +8,47 @@ use function Differ\GenDiff\genDiff;
 
 class GenDiffTest extends TestCase
 {
-    private function dir($filename)
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testStylish($firstFile, $secondFile)
+    {
+        $source = self::makePath('compareStylish.txt');
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'stylish'));
+    }
+
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testPlain($firstFile, $secondFile)
+    {
+        $source = self::makePath('comparePlain.txt');
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'plain'));
+    }
+
+    /**
+     * @dataProvider additionProvider
+     */
+    public function testJson($firstFile, $secondFile)
+    {
+        $source = self::makePath('compareJson.txt');
+        $expected = file_get_contents($source);
+        $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'json'));
+    }
+
+    private function makePath($filename)
     {
         return "tests/fixtures/$filename";
     }
 
-    public function testGenDiffJsonToJsonFormatStylish()
+    public function additionProvider()
     {
-        $source = __DIR__ . "/fixtures/compareStylishRecursiveResult.txt";
-        $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.json'), 'stylish'));
-    }
-    public function testGenDiffJsonToJsonFormatPlain()
-    {
-        $source = __DIR__ . "/fixtures/comparePlainRecursiveResult.txt";
-        $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.json'), 'plain'));
-    }
-    public function testGenDiffYamlToYamlFormatStylish()
-    {
-        $source = __DIR__ . "/fixtures/compareStylishRecursiveResult.txt";
-        $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff(self::dir('file1rec.yml'), self::dir('file2rec.yml'), 'stylish'));
-    }
-    public function testGenDiffJsonToYamlFormatPlain()
-    {
-        $source = __DIR__ . "/fixtures/comparePlainRecursiveResult.txt";
-        $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.yml'), 'plain'));
-    }
-    public function testGenDiffJsonToYamlFormatStylish()
-    {
-        $source = __DIR__ . "/fixtures/compareStylishRecursiveResult.txt";
-        $expected5 = file_get_contents($source);
-        $this->assertEquals($expected5, genDiff(self::dir('file1rec.json'), self::dir('file2rec.yml'), 'stylish'));
-    }
-    public function testGenDiffJsonToJsonFormatJson()
-    {
-        $source = __DIR__ . "/fixtures/compareJsonRecursiveResult.txt";
-        $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.json'), 'json'));
-    }
-    public function testGenDiffJsonToYamlFormatJson()
-    {
-        $source = __DIR__ . "/fixtures/compareJsonRecursiveResult.txt";
-        $expected = file_get_contents($source);
-        $this->assertEquals($expected, genDiff(self::dir('file1rec.json'), self::dir('file2rec.yml'), 'json'));
+        return [
+            [self::makePath('file1rec.json'), self::makePath('file2rec.json')],
+            [self::makePath('file1rec.yml'), self::makePath('file2rec.yml')],
+            [self::makePath('file1rec.json'), self::makePath('file2rec.yml')],
+        ];
     }
 }
