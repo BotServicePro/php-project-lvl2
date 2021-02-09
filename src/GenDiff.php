@@ -9,21 +9,20 @@ use function Differ\Formatters\astToStringConverter;
 use function Funct\Collection\sortBy;
 use function Funct\Collection\union;
 
-function makeFilePath($path)
+function readFile($path)
 {
     if (!file_exists($path)) {
         throw new Exception("File not found. Wrong filepath is: $path");
     }
-    //$path = $_SERVER['DOCUMENT_ROOT'] . '../' . $path;
-    return $path;
+    return ['fileData' => file_get_contents($path), 'extension' => pathinfo($path, PATHINFO_EXTENSION)];
 }
 
 function genDiff($path1, $path2, $format = 'stylish')
 {
-    $path1 = makeFilePath($path1);
-    $path2 = makeFilePath($path2);
-    $firstData = parse($path1);
-    $secondData = parse($path2);
+    $path1 = readFile($path1);
+    $path2 = readFile($path2);
+    $firstData = parse($path1['fileData'], $path1['extension']);
+    $secondData = parse($path2['fileData'], $path2['extension']);
     $differedData = buildTree($firstData, $secondData);
     return astToStringConverter($differedData, $format);
 }
