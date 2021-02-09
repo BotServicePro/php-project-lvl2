@@ -49,36 +49,35 @@ function strigify($data, $depth)
     if (is_object($data)) {
         $data = get_object_vars($data);
     }
-    if ($data === null || is_bool($data)) {
+    if (is_null($data) || is_bool($data)) {
         return strtolower(var_export($data, true));
-    }
-    if (is_string($data) || is_double($data) || is_int($data)) {
-        return var_export($data, true);
     }
     if (!is_array($data)) {
         return var_export($data, true);
     }
-    $space = '    ';
-    $tabulation = str_repeat($space, $depth);
-    $string = '';
-    $stringedData = array_map(function ($key, $value) use ($depth, $space, $tabulation, $string) {
+    $tab = makeTabulation($depth);
+    $stringedData = array_map(function ($key, $value) use ($depth, $tab) {
         if (is_object($value)) {
-            $value = (array) $value;
             $stringedValue = strigify($value, $depth + 1);
-            return "{$tabulation}{$space}{$key}: $stringedValue";
+            return "{$tab}    {$key}: $stringedValue";
         }
         if (!is_array($value) && !is_object($value)) {
-            return "{$tabulation}{$space}{$key}: $value";
+            return "{$tab}    {$key}: $value";
         }
         if (is_array($value) && is_array($value[key($value)])) {
             $stringed = strigify($value, $depth + 1);
-            return "{$tabulation}{$space}{$key}: $stringed";
+            return "{$tab}    {$key}: $stringed";
         }
         if (is_array($value) && !is_array($value[key($value)])) {
             $stringed2 = strigify($value, $depth + 1);
-            return "{$string}\n{$tabulation}{$space}{$key}: $stringed2";
+            return "\n{$tab}    {$key}: $stringed2";
         }
     }, array_keys($data), $data);
     $stringedData = implode("\n", $stringedData);
-    return "{\n{$stringedData}\n{$tabulation}}";
+    return "{\n{$stringedData}\n{$tab}}";
+}
+
+function makeTabulation($depth)
+{
+    return str_repeat('    ', $depth);
 }
