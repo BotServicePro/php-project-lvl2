@@ -2,29 +2,23 @@
 
 namespace Differ\Formatters;
 
-use function Differ\Formatters\Stylish\stylish;
-use function Differ\Formatters\Plain\plain;
+use function Differ\Formatters\Stylish\render as stylish;
+use function Differ\Formatters\Plain\render as plain;
 use function Differ\Formatters\Json\render as json;
-use function Funct\Collection\flatten;
-use function Funct\Collection\flattenAll;
 
-function astToStringConverter($data, $type)
+function format($tree, $format)
 {
-    switch ($type) {
+    switch ($format) {
         case 'stylish':
-            $depth = 1;
-            $stringedTree = stylish($data, $depth);
-            $finalResult = '{' . "\n" . implode("\n", flatten($stringedTree))  . "\n" . '}';
-            $finalResult = str_replace("'", '', $finalResult);
-            print_r($finalResult);
-            return $finalResult;
+            print_r(stylish($tree));
+            return stylish($tree);
         case 'plain':
-            $stringedData = plain($data, '');
-            $formatedData = implode("\n", flattenAll($stringedData));
-            print_r($formatedData);
-            return $formatedData;
+            print_r(plain($tree));
+            return plain($tree);
         case 'json':
-            print_r(json($data));
-            return json($data);
+            print_r(json($tree));
+            return json($tree);
+        default:
+            echo 'Unknown format';
     }
 }
