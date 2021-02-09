@@ -4,7 +4,7 @@ namespace Differ\GenDiff;
 
 use Exception;
 
-use function Differ\Parsers\extractData;
+use function Differ\Parsers\parse;
 use function Differ\Formatters\astToStringConverter;
 use function Funct\Collection\sortBy;
 use function Funct\Collection\union;
@@ -22,8 +22,8 @@ function genDiff($path1, $path2, $format = 'stylish')
 {
     $path1 = makeFilePath($path1);
     $path2 = makeFilePath($path2);
-    $firstData = extractData($path1);
-    $secondData = extractData($path2);
+    $firstData = parse($path1);
+    $secondData = parse($path2);
     $differedData = buildTree($firstData, $secondData);
     return astToStringConverter($differedData, $format);
 }

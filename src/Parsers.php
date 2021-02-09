@@ -8,7 +8,7 @@ const JSONEXTENSION = -4;
 const YMLEXTENSION = -3;
 const YAMLEXTENSION = -4;
 
-function extractData($fileName)
+function parse($fileName)
 {
     if (substr($fileName, YMLEXTENSION) === 'yml') { // если это yml файлы
         $file = file_get_contents($fileName);
