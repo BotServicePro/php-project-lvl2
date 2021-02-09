@@ -2,6 +2,17 @@
 
 namespace Differ\Formatters\Stylish;
 
+use function Funct\Collection\flatten;
+
+function render($tree)
+{
+    $depth = 1;
+    $stringedTree = stylish($tree, $depth);
+    $finalResult = '{' . "\n" . implode("\n", flatten($stringedTree))  . "\n" . '}';
+    $finalResult = str_replace("'", '', $finalResult);
+    return $finalResult;
+}
+
 function stylish($data, $depth)
 {
     $result = array_map(function ($item) use ($depth) {
