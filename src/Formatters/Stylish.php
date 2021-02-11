@@ -3,69 +3,77 @@
 namespace Differ\Formatters\Stylish;
 
 use function Funct\Collection\flatten;
+use function Funct\Collection\sortBy;
 
 function render($tree)
 {
-    $depth = 1;
-    $stringedTree = stylish($tree, $depth);
-    $finalResult = '{' . "\n" . implode("\n", flatten($stringedTree))  . "\n" . '}';
+    $stringedTree = stylish($tree);
+    $finalResult = "{\n" . implode("\n", flatten($stringedTree)) . "\n}";
     $finalResult = str_replace("'", '', $finalResult);
     return $finalResult;
 }
 
-function stylish($data, $depth)
+function stylish($data, $depth = 1)
 {
     $result = array_map(function ($item) use ($depth) {
-        $tabulation = str_repeat('    ', $depth - 1);
+        $indent = makeIndent($depth - 1);
         switch ($item['type']) {
             case 'added':
-                $stringedData = strigify($item['value'], $depth);
-                return "$tabulation  + {$item['key']}: $stringedData";
+                $formattedValue = strigify($item['value'], $depth);
+                return "$indent  + {$item['key']}: $formattedValue";
             case 'removed':
-                $stringedData = strigify($item['value'], $depth);
-                return "$tabulation  - {$item['key']}: $stringedData";
+                $formattedValue = strigify($item['value'], $depth);
+                return "$indent  - {$item['key']}: $formattedValue";
             case 'changed':
                 $oldValue = strigify($item['oldValue'], $depth);
                 $newValue = strigify($item['newValue'], $depth);
-                $stringedNewValue = "$tabulation  + {$item['key']}: $newValue";
-                $stringedOldValue = "$tabulation  - {$item['key']}: $oldValue";
-                return "{$stringedOldValue}\n{$stringedNewValue}";
+                $formattedNewValue = "$indent  + {$item['key']}: $newValue";
+                $formattedOldValue = "$indent  - {$item['key']}: $oldValue";
+                return "{$formattedOldValue}\n{$formattedNewValue}";
             case 'unchanged':
-                $stringedData = strigify($item['value'], $depth);
-                return "$tabulation    {$item['key']}: $stringedData";
+                $formattedValue = strigify($item['value'], $depth);
+                return "$indent    {$item['key']}: $formattedValue";
             case 'nested':
                 $children = $item['children'];
-                $stringedHeader = "$tabulation    {$item['key']}: {";
+                $formattedHeader = "$indent    {$item['key']}: {";
                 $body = stylish($children, $depth + 1);
                 $stringedBody = implode("\n", $body);
-                return "{$stringedHeader}\n{$stringedBody}\n{$tabulation}    }";
+                return "{$formattedHeader}\n{$stringedBody}\n{$indent}    }";
+            default:
+                throw new \Exception("Error, something wrong with {$item['type']}");
         }
     }, $data);
     return $result;
 }
 
-function strigify($data, $depth)
+function strigify($value, $depth)
 {
-    if (is_object($data)) {
-        $data = get_object_vars($data);
+    if (is_null($value)) {
+        return 'null';
     }
-    if (is_null($data) || is_bool($data)) {
-        return strtolower(var_export($data, true));
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
     }
-    if (!is_array($data)) {
-        return $data;
+    if (!is_object($value)) {
+        return (string) $value;
+    }
+    if (is_array($value)) {
+        return implode(' ', $value);
     }
 
-    $tab = makeTabulation($depth);
-    $stringedData = array_map(function ($key, $value) use ($depth, $tab) {
+    $value = sortBy(get_object_vars($value), function ($key) {
+        return $key;
+    }, $sortFunction = 'ksort');
+    $indent = makeIndent($depth);
+    $stringedData = array_map(function ($key, $value) use ($depth, $indent) {
         $stringedData = strigify($value, $depth + 1);
-        return "{$tab}    {$key}: $stringedData";
-    }, array_keys($data), $data);
+        return "{$indent}    {$key}: $stringedData";
+    }, array_keys($value), $value);
     $stringedData = implode("\n", $stringedData);
-    return "{\n{$stringedData}\n{$tab}}";
+    return "{\n{$stringedData}\n{$indent}}";
 }
 
-function makeTabulation($depth)
+function makeIndent($depth)
 {
     return str_repeat('    ', $depth);
 }
