@@ -6,19 +6,18 @@ use function Funct\Collection\flattenAll;
 
 function render($tree)
 {
-    $path = '';
-    $stringedTree = plain($tree, $path);
-    $formatedData = implode("\n", flattenAll($stringedTree));
-    return $formatedData;
+    $formattedTree = plain($tree);
+    $finalResult = implode("\n", flattenAll($formattedTree));
+    return $finalResult;
 }
 
-function plain($data, $path)
+function plain($tree, $path = '')
 {
     $result = array_map(function ($item) use ($path) {
         switch ($item['type']) {
             case 'added':
-                $formattedData = stringify($item['value']);
-                return "Property '{$path}{$item['key']}' was added with value: $formattedData";
+                $formattedValue = stringify($item['value']);
+                return "Property '{$path}{$item['key']}' was added with value: $formattedValue";
             case 'removed':
                 return "Property '{$path}{$item['key']}' was removed";
             case 'changed':
@@ -32,7 +31,7 @@ function plain($data, $path)
                 $children = $item['children'];
                 return plain($children, $nestedPath);
         }
-    }, $data);
+    }, $tree);
     return $result;
 }
 
