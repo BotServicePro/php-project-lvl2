@@ -15,7 +15,7 @@ class GenDiffTest extends TestCase
     {
         $path = $this->getPath('compareStylish.txt');
         $expected = file_get_contents($path);
-        $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'stylish'));
+        $this->assertEquals($expected, genDiff($firstFile, $secondFile));
     }
 
     /**
