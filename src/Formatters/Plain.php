@@ -17,8 +17,8 @@ function plain($data, $path)
     $result = array_map(function ($item) use ($path) {
         switch ($item['type']) {
             case 'added':
-                $stringedData = stringify($item['value']);
-                return "Property '{$path}{$item['key']}' was added with value: $stringedData";
+                $formattedData = stringify($item['value']);
+                return "Property '{$path}{$item['key']}' was added with value: $formattedData";
             case 'removed':
                 return "Property '{$path}{$item['key']}' was removed";
             case 'changed':
@@ -36,25 +36,19 @@ function plain($data, $path)
     return $result;
 }
 
-function stringify($data)
+function stringify($value)
 {
-    if ($data === null) {
-        return strtolower(var_export($data, true));
+    if (is_null($value)) {
+        return 'null';
     }
-    if (is_bool($data)) {
-        return var_export($data, true);
+    if (is_bool($value)) {
+        return $value ? 'true' : 'false';
     }
-    if (is_array($data)) {
+    if (is_array($value)) {
         return "[complex value]";
     }
-    if (is_string($data)) {
-        return "'{$data}'";
-    }
-    if (is_double($data) || is_int($data)) {
-        return "{$data}";
-    }
-    if (is_object($data)) {
+    if (is_object($value)) {
         return "[complex value]";
     }
-    return $data;
+    return (string) "'{$value}'";
 }
