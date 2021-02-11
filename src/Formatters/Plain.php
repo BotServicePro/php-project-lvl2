@@ -17,13 +17,13 @@ function plain($data, $path)
     $result = array_map(function ($item) use ($path) {
         switch ($item['type']) {
             case 'added':
-                $stringedData = stringedData($item['value']);
+                $stringedData = stringify($item['value']);
                 return "Property '{$path}{$item['key']}' was added with value: $stringedData";
             case 'removed':
                 return "Property '{$path}{$item['key']}' was removed";
             case 'changed':
-                $oldValue = stringedData($item['oldValue']);
-                $newValue = stringedData($item['newValue']);
+                $oldValue = stringify($item['oldValue']);
+                $newValue = stringify($item['newValue']);
                 return "Property '{$path}{$item['key']}' was updated. From $oldValue to $newValue";
             case 'unchanged':
                 return [];
@@ -36,7 +36,7 @@ function plain($data, $path)
     return $result;
 }
 
-function stringedData($data)
+function stringify($data)
 {
     if ($data === null) {
         return strtolower(var_export($data, true));
