@@ -13,6 +13,6 @@ function parse($fileData, $extension)
         case 'json':
             return json_decode($fileData);
         default:
-            echo 'Unknown file extension';
+            throw new \Exception("Unknown file extension!");
     }
 }
