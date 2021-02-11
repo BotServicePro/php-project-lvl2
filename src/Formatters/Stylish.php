@@ -40,7 +40,7 @@ function stylish($tree, $depth = 1)
                 $formattedBody = implode("\n", $body);
                 return "{$formattedHeader}\n{$formattedBody}\n{$indent}    }";
             default:
-                throw new \Exception("Error, something wrong with {$item['type']}");
+                throw new \Exception("Error, could not identify 'type' in {$item}");
         }
     }, $tree);
     return $result;
@@ -63,12 +63,12 @@ function strigify($value, $depth)
 
     $value = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
-    $stringedData = array_map(function ($key, $value) use ($depth, $indent) {
-        $stringedData = strigify($value, $depth + 1);
-        return "{$indent}    {$key}: $stringedData";
+    $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
+        $formattedValue = strigify($value, $depth + 1);
+        return "{$indent}    {$key}: $formattedValue";
     }, array_keys($value), $value);
-    $stringedData = implode("\n", $stringedData);
-    return "{\n{$stringedData}\n{$indent}}";
+    $formettedValue = implode("\n", $formettedValue);
+    return "{\n{$formettedValue}\n{$indent}}";
 }
 
 function makeIndent($depth)
