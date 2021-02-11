@@ -32,10 +32,7 @@ function buildTree($firstData, $secondData)
     $keysFromFirstData = array_keys(get_object_vars($firstData));
     $keysFromSecondData = array_keys(get_object_vars($secondData));
     $uniqueKeys = union($keysFromFirstData, $keysFromSecondData);
-    $sortedUniqueKeys = array_values(sortBy($uniqueKeys, function ($key) {
-        return $key;
-    }));
-
+    $sortedUniqueKeys = array_values(sortBy($uniqueKeys, fn ($key) => $key));
     $data = array_map(function ($key) use ($firstData, $secondData) {
         if (!property_exists($secondData, $key)) {
             return ['key' => $key, 'value' => $firstData->$key, 'type' => 'removed'];
