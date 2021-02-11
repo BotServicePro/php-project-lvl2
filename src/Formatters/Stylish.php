@@ -53,7 +53,7 @@ function strigify($data, $depth)
         return strtolower(var_export($data, true));
     }
     if (!is_array($data)) {
-        return var_export($data, true);
+        return $data;
     }
 
     $tab = makeTabulation($depth);
