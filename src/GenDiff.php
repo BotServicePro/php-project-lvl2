@@ -41,12 +41,7 @@ function buildTree($firstData, $secondData)
             return ['key' => $key, 'value' => $firstData->$key, 'type' => 'removed'];
         }
         if (!property_exists($firstData, $key)) {
-            $value = is_object($secondData->$key) ? sortBy(get_object_vars($secondData->$key), function ($item) {
-                if (!is_object($item)) {
-                    return $item;
-                }
-            }) : $secondData->$key;
-            return ['key' => $key, 'value' => $value, 'type' => 'added'];
+            return ['key' => $key, 'value' => $secondData->$key, 'type' => 'added'];
         }
         $nodeFirst = $firstData->$key;
         $nodeSecond = $secondData->$key;
