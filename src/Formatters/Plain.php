@@ -43,6 +43,9 @@ function stringify($value)
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
     }
+    if (is_int($value)) {
+        return $value;
+    }
     if (is_array($value)) {
         return "[complex value]";
     }
