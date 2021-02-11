@@ -7,13 +7,13 @@ use function Funct\Collection\sortBy;
 
 function render($tree)
 {
-    $stringedTree = stylish($tree);
-    $finalResult = "{\n" . implode("\n", flatten($stringedTree)) . "\n}";
+    $formattedTree = stylish($tree);
+    $finalResult = "{\n" . implode("\n", flatten($formattedTree)) . "\n}";
     $finalResult = str_replace("'", '', $finalResult);
     return $finalResult;
 }
 
-function stylish($data, $depth = 1)
+function stylish($tree, $depth = 1)
 {
     $result = array_map(function ($item) use ($depth) {
         $indent = makeIndent($depth - 1);
@@ -37,12 +37,12 @@ function stylish($data, $depth = 1)
                 $children = $item['children'];
                 $formattedHeader = "$indent    {$item['key']}: {";
                 $body = stylish($children, $depth + 1);
-                $stringedBody = implode("\n", $body);
-                return "{$formattedHeader}\n{$stringedBody}\n{$indent}    }";
+                $formattedBody = implode("\n", $body);
+                return "{$formattedHeader}\n{$formattedBody}\n{$indent}    }";
             default:
                 throw new \Exception("Error, something wrong with {$item['type']}");
         }
-    }, $data);
+    }, $tree);
     return $result;
 }
 
@@ -61,9 +61,7 @@ function strigify($value, $depth)
         return implode(' ', $value);
     }
 
-    $value = sortBy(get_object_vars($value), function ($key) {
-        return $key;
-    }, $sortFunction = 'ksort');
+    $value = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
     $stringedData = array_map(function ($key, $value) use ($depth, $indent) {
         $stringedData = strigify($value, $depth + 1);
