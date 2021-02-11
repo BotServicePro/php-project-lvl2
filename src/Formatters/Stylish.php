@@ -29,7 +29,7 @@ function stylish($data, $depth)
                 $newValue = strigify($item['newValue'], $depth);
                 $stringedNewValue = "$tabulation  + {$item['key']}: $newValue";
                 $stringedOldValue = "$tabulation  - {$item['key']}: $oldValue";
-                return $stringedOldValue . "\n" . $stringedNewValue;
+                return "{$stringedOldValue}\n{$stringedNewValue}";
             case 'unchanged':
                 $stringedData = strigify($item['value'], $depth);
                 return "$tabulation    {$item['key']}: $stringedData";
@@ -55,23 +55,11 @@ function strigify($data, $depth)
     if (!is_array($data)) {
         return var_export($data, true);
     }
+
     $tab = makeTabulation($depth);
     $stringedData = array_map(function ($key, $value) use ($depth, $tab) {
-        if (is_object($value)) {
-            $stringedValue = strigify($value, $depth + 1);
-            return "{$tab}    {$key}: $stringedValue";
-        }
-        if (!is_array($value) && !is_object($value)) {
-            return "{$tab}    {$key}: $value";
-        }
-        if (is_array($value) && is_array($value[key($value)])) {
-            $stringed = strigify($value, $depth + 1);
-            return "{$tab}    {$key}: $stringed";
-        }
-        if (is_array($value) && !is_array($value[key($value)])) {
-            $stringed2 = strigify($value, $depth + 1);
-            return "\n{$tab}    {$key}: $stringed2";
-        }
+        $stringedData = strigify($value, $depth + 1);
+        return "{$tab}    {$key}: $stringedData";
     }, array_keys($data), $data);
     $stringedData = implode("\n", $stringedData);
     return "{\n{$stringedData}\n{$tab}}";
