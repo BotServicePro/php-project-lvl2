@@ -13,7 +13,7 @@ class GenDiffTest extends TestCase
      */
     public function testStylish($firstFile, $secondFile)
     {
-        $path = $this->makePath('compareStylish.txt');
+        $path = $this->getPath('compareStylish.txt');
         $expected = file_get_contents($path);
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'stylish'));
     }
@@ -23,7 +23,7 @@ class GenDiffTest extends TestCase
      */
     public function testPlain($firstFile, $secondFile)
     {
-        $path = $this->makePath('comparePlain.txt');
+        $path = $this->getPath('comparePlain.txt');
         $expected = file_get_contents($path);
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'plain'));
     }
@@ -33,12 +33,12 @@ class GenDiffTest extends TestCase
      */
     public function testJson($firstFile, $secondFile)
     {
-        $path = $this->makePath('compareJson.txt');
+        $path = $this->getPath('compareJson.txt');
         $expected = file_get_contents($path);
         $this->assertEquals($expected, genDiff($firstFile, $secondFile, 'json'));
     }
 
-    private function makePath($filename)
+    private function getPath($filename)
     {
         return "tests/fixtures/$filename";
     }
@@ -46,9 +46,9 @@ class GenDiffTest extends TestCase
     public function additionProvider()
     {
         return [
-            [$this->makePath('file1.json'), $this->makePath('file2.json')],
-            [$this->makePath('file1.yml'), $this->makePath('file2.yml')],
-            [$this->makePath('file1.json'), $this->makePath('file2.yml')],
+            [$this->getPath('file1.json'), $this->getPath('file2.json')],
+            [$this->getPath('file1.yml'), $this->getPath('file2.yml')],
+            [$this->getPath('file1.json'), $this->getPath('file2.yml')],
         ];
     }
 }
