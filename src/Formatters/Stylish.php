@@ -60,7 +60,6 @@ function strigify($value, $depth)
     if (is_array($value)) {
         return implode(' ', $value);
     }
-
     $value = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
     $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
