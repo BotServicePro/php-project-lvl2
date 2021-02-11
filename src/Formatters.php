@@ -2,22 +2,18 @@
 
 namespace Differ\Formatters;
 
-use function Differ\Formatters\Stylish\render as stylish;
-use function Differ\Formatters\Plain\render as plain;
-use function Differ\Formatters\Json\render as json;
-
 function format($tree, $format)
 {
     switch ($format) {
         case 'stylish':
-            print_r(stylish($tree));
-            return stylish($tree);
+            print_r(Stylish\render($tree));
+            return Stylish\render($tree);
         case 'plain':
-            print_r(plain($tree));
-            return plain($tree);
+            print_r(Plain\render($tree));
+            return Plain\render($tree);
         case 'json':
-            print_r(json($tree));
-            return json($tree);
+            print_r(Json\render($tree));
+            return Json\render($tree);
         default:
             throw new \Exception("Error, wrong format!");
     }
