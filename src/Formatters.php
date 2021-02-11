@@ -19,6 +19,6 @@ function format($tree, $format)
             print_r(json($tree));
             return json($tree);
         default:
-            echo 'Unknown format';
+            throw new \Exception("Error, wrong format!");
     }
 }
