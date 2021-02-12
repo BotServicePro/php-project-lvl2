@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\GenDiff;
+namespace Differ\Differ;
 
 use Exception;
 
