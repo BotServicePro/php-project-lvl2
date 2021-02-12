@@ -27,7 +27,11 @@ Options:
     -v --version                  Show version
     --format <fmt>                Report format [default: stylish]
 DOC;
-
-$args = Docopt::handle($doc, ['version' => '1.0']);
-$result = genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
-print_r($result);
+try {
+    $args = Docopt::handle($doc, ['version' => '1.0']);
+    $result = genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception: ',  $e->getMessage(), "\n";
+    exit;
+}
