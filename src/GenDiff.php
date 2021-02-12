@@ -23,15 +23,13 @@ function genDiff($path1, $path2, $format = 'stylish')
     $path2 = readFile($path2);
     $firstData = parse($path1['fileData'], $path1['extension']);
     $secondData = parse($path2['fileData'], $path2['extension']);
-    $differedData = buildTree($firstData, $secondData);
-    return format($differedData, $format);
+    $differedTree = buildTree($firstData, $secondData);
+    return format($differedTree, $format);
 }
 
 function buildTree($firstData, $secondData)
 {
-    $keysFromFirstData = array_keys(get_object_vars($firstData));
-    $keysFromSecondData = array_keys(get_object_vars($secondData));
-    $uniqueKeys = union($keysFromFirstData, $keysFromSecondData);
+    $uniqueKeys = union(array_keys(get_object_vars($firstData)), array_keys(get_object_vars($secondData)));
     $sortedUniqueKeys = array_values(sortBy($uniqueKeys, fn ($key) => $key));
     $data = array_map(function ($key) use ($firstData, $secondData) {
         if (!property_exists($secondData, $key)) {
@@ -40,15 +38,18 @@ function buildTree($firstData, $secondData)
         if (!property_exists($firstData, $key)) {
             return ['key' => $key, 'value' => $secondData->$key, 'type' => 'added'];
         }
-        $nodeFirst = $firstData->$key;
-        $nodeSecond = $secondData->$key;
-        if (is_object($nodeFirst) && is_object($nodeSecond)) {
-            return ['key' => $key, 'type' => 'nested', 'children' => buildTree($nodeFirst, $nodeSecond)];
+        if (is_object($firstData->$key) && is_object($secondData->$key)) {
+            return ['key' => $key, 'type' => 'nested', 'children' => buildTree($firstData->$key, $secondData->$key)];
         }
-        if ($nodeFirst !== $nodeSecond) {
-            return ['key' => $key, 'oldValue' => $nodeFirst, 'newValue' => $nodeSecond, 'type' => 'changed'];
+        if ($firstData->$key !== $secondData->$key) {
+            return [
+                'key' => $key,
+                'oldValue' => $firstData->$key,
+                'newValue' => $secondData->$key,
+                'type' => 'changed'
+            ];
         }
-        return  ['key' => $key, 'value' => $nodeFirst, 'type' => 'unchanged'];
+        return  ['key' => $key, 'value' => $firstData->$key, 'type' => 'unchanged'];
     }, $sortedUniqueKeys);
     return $data;
 }
