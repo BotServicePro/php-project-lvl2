@@ -12,6 +12,6 @@ function format($tree, $format)
         case 'json':
             return Json\render($tree);
         default:
-            throw new \Exception("Error, wrong format!");
+            throw new \Exception("Error, wrong format $format!");
     }
 }
