@@ -30,6 +30,8 @@ function plain($tree, $path = '')
                 $nestedPath = "{$path}{$item['key']}.";
                 $children = $item['children'];
                 return plain($children, $nestedPath);
+            default:
+                throw new \Exception("Error, could not identify 'type' in {$item}");
         }
     }, $tree);
     return $result;
