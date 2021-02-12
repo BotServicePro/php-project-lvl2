@@ -46,10 +46,7 @@ function stringify($value)
     if (is_int($value)) {
         return $value;
     }
-    if (is_array($value)) {
-        return "[complex value]";
-    }
-    if (is_object($value)) {
+    if (is_array($value) || is_object($value)) {
         return "[complex value]";
     }
     return (string) "'{$value}'";
