@@ -40,7 +40,7 @@ function stylish($tree, $depth = 1): array
                 $formattedBody = implode("\n", $body);
                 return "{$formattedHeader}\n{$formattedBody}\n{$indent}    }";
             default:
-                throw new \Exception("Error, could not identify 'type' in {$item['type']}");
+                throw new \Exception("Error, could not identify 'type' in {$item}");
         }
     }, $tree);
 }
