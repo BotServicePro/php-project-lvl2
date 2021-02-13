@@ -57,12 +57,12 @@ function strigify($value, $depth)
     if (!is_object($value)) {
         return (string) $value;
     }
-    $value = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
+    $sortedValue = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
     $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
         $formattedValue = strigify($value, $depth + 1);
         return "{$indent}    {$key}: $formattedValue";
-    }, array_keys($value), $value);
+    }, array_keys($sortedValue), $sortedValue);
     $result = implode("\n", $formettedValue);
     return "{\n{$result}\n{$indent}}";
 }
