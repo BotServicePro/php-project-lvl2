@@ -61,7 +61,7 @@ function strigify($value, $depth)
     $indent = makeIndent($depth);
     $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
         $formattedValue = strigify($value, $depth + 1);
-        return (string) "{$indent}    {$key}: $formattedValue";
+        return "{$indent}    {$key}: $formattedValue";
     }, array_keys($sortedValue), $sortedValue);
     $result = implode("\n", $formettedValue);
     return "{\n{$result}\n{$indent}}";
