@@ -20,25 +20,25 @@ function stylish($tree, $depth = 1): array
         switch ($item['type']) {
             case 'added':
                 $formattedValue = strigify($item['value'], $depth);
-                return (string) "$indent  + {$item['key']}: $formattedValue";
+                return "$indent  + {$item['key']}: $formattedValue";
             case 'removed':
                 $formattedValue = strigify($item['value'], $depth);
-                return (string) "$indent  - {$item['key']}: $formattedValue";
+                return "$indent  - {$item['key']}: $formattedValue";
             case 'changed':
                 $oldValue = strigify($item['oldValue'], $depth);
                 $newValue = strigify($item['newValue'], $depth);
                 $formattedNewValue = "$indent  + {$item['key']}: $newValue";
                 $formattedOldValue = "$indent  - {$item['key']}: $oldValue";
-                return (string) "{$formattedOldValue}\n{$formattedNewValue}";
+                return "{$formattedOldValue}\n{$formattedNewValue}";
             case 'unchanged':
                 $formattedValue = strigify($item['value'], $depth);
-                return (string) "$indent    {$item['key']}: $formattedValue";
+                return "$indent    {$item['key']}: $formattedValue";
             case 'nested':
                 $children = $item['children'];
                 $formattedHeader = "$indent    {$item['key']}: {";
                 $body = stylish($children, $depth + 1);
                 $formattedBody = implode("\n", $body);
-                return (string) "{$formattedHeader}\n{$formattedBody}\n{$indent}    }";
+                return "{$formattedHeader}\n{$formattedBody}\n{$indent}    }";
             default:
                 throw new \Exception("Error, could not identify 'type' in {$item}");
         }
@@ -60,7 +60,7 @@ function strigify($value, $depth): string
     $indent = makeIndent($depth);
     $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
         $formattedValue = strigify($value, $depth + 1);
-        return (string) "{$indent}    {$key}: $formattedValue";
+        return "{$indent}    {$key}: $formattedValue";
     }, array_keys($sortedValue), $sortedValue);
     $result = implode("\n", $formettedValue);
     return "{\n{$result}\n{$indent}}";
