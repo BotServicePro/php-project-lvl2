@@ -15,7 +15,7 @@ function render($tree)
 
 function stylish($tree, $depth = 1)
 {
-    $result = array_map(function ($item) use ($depth) {
+    return array_map(function ($item) use ($depth) {
         $indent = makeIndent($depth - 1);
         switch ($item['type']) {
             case 'added':
@@ -43,7 +43,6 @@ function stylish($tree, $depth = 1)
                 throw new \Exception("Error, could not identify 'type' in {$item}");
         }
     }, $tree);
-    return $result;
 }
 
 function strigify($value, $depth)
