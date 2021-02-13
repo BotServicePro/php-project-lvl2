@@ -29,8 +29,7 @@ Options:
 DOC;
 try {
     $args = Docopt::handle($doc, ['version' => '1.0']);
-    $result = genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
-    print_r($result);
+    echo genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
 } catch (Exception $e) {
     echo 'Exception: ',  $e->getMessage(), "\n";
     exit;

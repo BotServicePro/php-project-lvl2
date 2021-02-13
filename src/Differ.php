@@ -27,11 +27,11 @@ function genDiff($path1, $path2, $format = 'stylish'): string
     return format($differedTree, $format);
 }
 
-function buildTree($firstData, $secondData): array
+function buildTree(object $firstData, object $secondData): array
 {
     $uniqueKeys = union(array_keys(get_object_vars($firstData)), array_keys(get_object_vars($secondData)));
     $sortedUniqueKeys = array_values(sortBy($uniqueKeys, fn ($key) => $key));
-    $data = array_map(function ($key) use ($firstData, $secondData) {
+    $data = array_map(function (string $key) use ($firstData, $secondData): array {
         if (!property_exists($secondData, $key)) {
             return ['key' => $key, 'value' => $firstData->$key, 'type' => 'removed'];
         }
