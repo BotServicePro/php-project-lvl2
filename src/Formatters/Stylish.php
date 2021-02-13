@@ -54,9 +54,6 @@ function strigify($value, $depth)
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
     }
-    if (is_array($value) && !is_object($value)) {
-        return implode(' ', $value);
-    }
     if (!is_object($value)) {
         return (string) $value;
     }
@@ -66,8 +63,8 @@ function strigify($value, $depth)
         $formattedValue = strigify($value, $depth + 1);
         return "{$indent}    {$key}: $formattedValue";
     }, array_keys($value), $value);
-    $formettedValue = implode("\n", $formettedValue);
-    return "{\n{$formettedValue}\n{$indent}}";
+    $result = implode("\n", $formettedValue);
+    return "{\n{$result}\n{$indent}}";
 }
 
 function makeIndent($depth)
