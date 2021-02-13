@@ -9,7 +9,7 @@ use function Differ\Formatters\format;
 use function Funct\Collection\sortBy;
 use function Funct\Collection\union;
 
-function readFile($path)
+function readFile($path): array
 {
     if (!file_exists($path)) {
         throw new Exception("File not found. Wrong filepath is: $path");
@@ -17,7 +17,7 @@ function readFile($path)
     return ['fileData' => file_get_contents($path), 'extension' => pathinfo($path, PATHINFO_EXTENSION)];
 }
 
-function genDiff($path1, $path2, $format = 'stylish')
+function genDiff($path1, $path2, $format = 'stylish'): string
 {
     $firstPath = readFile($path1);
     $secondPath = readFile($path2);
@@ -27,7 +27,7 @@ function genDiff($path1, $path2, $format = 'stylish')
     return format($differedTree, $format);
 }
 
-function buildTree($firstData, $secondData)
+function buildTree($firstData, $secondData): array
 {
     $uniqueKeys = union(array_keys(get_object_vars($firstData)), array_keys(get_object_vars($secondData)));
     $sortedUniqueKeys = array_values(sortBy($uniqueKeys, fn ($key) => $key));

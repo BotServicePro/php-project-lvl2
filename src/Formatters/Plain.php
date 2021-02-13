@@ -4,14 +4,14 @@ namespace Differ\Formatters\Plain;
 
 use function Funct\Collection\flattenAll;
 
-function render($tree)
+function render($tree): string
 {
     $formattedTree = plain($tree);
     $finalResult = implode("\n", flattenAll($formattedTree));
     return $finalResult;
 }
 
-function plain($tree, $path = '')
+function plain($tree, $path = ''): array
 {
     $result = array_map(function ($item) use ($path) {
         switch ($item['type']) {
@@ -37,7 +37,7 @@ function plain($tree, $path = '')
     return $result;
 }
 
-function stringify($value)
+function stringify($value): string
 {
     if (is_null($value)) {
         return 'null';

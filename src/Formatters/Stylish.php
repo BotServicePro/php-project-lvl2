@@ -5,7 +5,7 @@ namespace Differ\Formatters\Stylish;
 use function Funct\Collection\flatten;
 use function Funct\Collection\sortBy;
 
-function render($tree)
+function render($tree): string
 {
     $formattedTree = stylish($tree);
     $tempResult = "{\n" . implode("\n", flatten($formattedTree)) . "\n}";
@@ -13,7 +13,7 @@ function render($tree)
     return $finalResult;
 }
 
-function stylish($tree, $depth = 1)
+function stylish($tree, $depth = 1): array
 {
     return array_map(function ($item) use ($depth) {
         $indent = makeIndent($depth - 1);
@@ -45,7 +45,7 @@ function stylish($tree, $depth = 1)
     }, $tree);
 }
 
-function strigify($value, $depth)
+function strigify($value, $depth): string
 {
     if (is_null($value)) {
         return 'null';
