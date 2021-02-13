@@ -51,5 +51,5 @@ function stringify($value)
     if (is_array($value) || is_object($value)) {
         return "[complex value]";
     }
-    return (string) "'{$value}'";
+    return "'{$value}'";
 }
