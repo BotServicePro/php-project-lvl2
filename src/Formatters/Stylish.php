@@ -66,7 +66,7 @@ function strigify($value, $depth)
     return "{\n{$result}\n{$indent}}";
 }
 
-function makeIndent($depth)
+function makeIndent($depth) : string
 {
     return str_repeat('    ', $depth);
 }
