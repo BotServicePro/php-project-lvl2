@@ -15,5 +15,4 @@ function parse($fileData, $extension)
         default:
             throw new \Exception("Unknown file extension $extension!");
     }
-    return;
 }
