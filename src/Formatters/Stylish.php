@@ -8,8 +8,8 @@ use function Funct\Collection\sortBy;
 function render($tree)
 {
     $formattedTree = stylish($tree);
-    $finalResult = "{\n" . implode("\n", flatten($formattedTree)) . "\n}";
-    $finalResult = str_replace("'", '', $finalResult);
+    $tempResult = "{\n" . implode("\n", flatten($formattedTree)) . "\n}";
+    $finalResult = str_replace("'", '', $tempResult);
     return $finalResult;
 }
 

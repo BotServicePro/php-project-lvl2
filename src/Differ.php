@@ -19,8 +19,6 @@ function readFile($path)
 
 function genDiff($path1, $path2, $format = 'stylish')
 {
-    //$path1 = readFile($path1);
-    //$path2 = readFile($path2);
     $firstPath = readFile($path1);
     $secondPath = readFile($path2);
     $firstData = parse($firstPath['fileData'], $firstPath['extension']);
