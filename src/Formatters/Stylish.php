@@ -43,7 +43,7 @@ function stylish($tree, $depth = 1)
                 throw new \Exception("Error, could not identify 'type' in {$item}");
         }
     }, $tree);
-    return $result;
+    return (string) $result;
 }
 
 function strigify($value, $depth)
