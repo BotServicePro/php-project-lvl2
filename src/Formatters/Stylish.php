@@ -58,7 +58,7 @@ function strigify($value, $depth): string
     }
     $sortedValue = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
-    $formettedValue = array_map(function (string $key, $value) use ($depth, $indent) {
+    $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
         $formattedValue = strigify($value, $depth + 1);
         return "{$indent}    {$key}: $formattedValue";
     }, array_keys($sortedValue), $sortedValue);
