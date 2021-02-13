@@ -54,11 +54,11 @@ function strigify($value, $depth)
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
     }
+    if (is_array($value) && !is_object($value)) {
+        return implode(' ', $value);
+    }
     if (!is_object($value)) {
         return (string) $value;
-    }
-    if (is_array($value)) {
-        return implode(' ', $value);
     }
     $value = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
