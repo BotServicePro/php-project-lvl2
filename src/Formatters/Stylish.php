@@ -15,7 +15,7 @@ function render($tree): string
 
 function stylish($tree, $depth = 1): array
 {
-    return array_map(function ($item) use ($depth) {
+    return array_map(function ($item) use ($depth): string {
         $indent = makeIndent($depth - 1);
         switch ($item['type']) {
             case 'added':
@@ -58,7 +58,7 @@ function strigify($value, $depth): string
     }
     $sortedValue = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
-    $formettedValue = array_map(function ($key, $value) use ($depth, $indent) {
+    $formettedValue = array_map(function ($key, $value) use ($depth, $indent): string  {
         $formattedValue = strigify($value, $depth + 1);
         return "{$indent}    {$key}: $formattedValue";
     }, array_keys($sortedValue), $sortedValue);
