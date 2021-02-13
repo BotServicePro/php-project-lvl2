@@ -19,10 +19,12 @@ function readFile($path)
 
 function genDiff($path1, $path2, $format = 'stylish')
 {
-    $path1 = readFile($path1);
-    $path2 = readFile($path2);
-    $firstData = parse($path1['fileData'], $path1['extension']);
-    $secondData = parse($path2['fileData'], $path2['extension']);
+    //$path1 = readFile($path1);
+    //$path2 = readFile($path2);
+    $firstPath = readFile($path1);
+    $secondPath = readFile($path2);
+    $firstData = parse($firstPath['fileData'], $firstPath['extension']);
+    $secondData = parse($secondPath['fileData'], $secondPath['extension']);
     $differedTree = buildTree($firstData, $secondData);
     return format($differedTree, $format);
 }
