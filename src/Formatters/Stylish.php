@@ -15,7 +15,7 @@ function render($tree): string
 
 function stylish($tree, $depth = 1): array
 {
-    return array_map(function (array $item) use ($depth) {
+    return array_map(function ($item) use ($depth) {
         $indent = makeIndent($depth - 1);
         switch ($item['type']) {
             case 'added':
