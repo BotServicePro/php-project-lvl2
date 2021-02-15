@@ -17,7 +17,8 @@ function readFile($path): string
     return file_get_contents($path);
 }
 
-function getExtension($path) {
+function getExtension($path)
+{
     return pathinfo($path, PATHINFO_EXTENSION);
 }
 
