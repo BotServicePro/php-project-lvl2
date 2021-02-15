@@ -13,10 +13,10 @@ function readFile($path): string
     if (!file_exists($path)) {
         throw new Exception("File not found. Wrong filepath is: $path");
     }
-    return file_get_contents($path);
+    return (string) file_get_contents($path);
 }
 
-function getExtension($path)
+function getExtension($path): string
 {
     return pathinfo($path, PATHINFO_EXTENSION);
 }
