@@ -19,19 +19,19 @@ function stylish($tree, $depth = 1): array
         $indent = makeIndent($depth - 1);
         switch ($item['type']) {
             case 'added':
-                $formattedValue = strigify($item['value'], $depth);
+                $formattedValue = stringify($item['value'], $depth);
                 return "$indent  + {$item['key']}: $formattedValue";
             case 'removed':
-                $formattedValue = strigify($item['value'], $depth);
+                $formattedValue = stringify($item['value'], $depth);
                 return "$indent  - {$item['key']}: $formattedValue";
             case 'changed':
-                $oldValue = strigify($item['oldValue'], $depth);
-                $newValue = strigify($item['newValue'], $depth);
+                $oldValue = stringify($item['oldValue'], $depth);
+                $newValue = stringify($item['newValue'], $depth);
                 $formattedNewValue = "$indent  + {$item['key']}: $newValue";
                 $formattedOldValue = "$indent  - {$item['key']}: $oldValue";
                 return "{$formattedOldValue}\n{$formattedNewValue}";
             case 'unchanged':
-                $formattedValue = strigify($item['value'], $depth);
+                $formattedValue = stringify($item['value'], $depth);
                 return "$indent    {$item['key']}: $formattedValue";
             case 'nested':
                 $children = $item['children'];
@@ -45,7 +45,7 @@ function stylish($tree, $depth = 1): array
     }, $tree);
 }
 
-function strigify($value, $depth): string
+function stringify($value, $depth): string
 {
     if (is_null($value)) {
         return 'null';
@@ -59,7 +59,7 @@ function strigify($value, $depth): string
     $sortedValue = sortBy(get_object_vars($value), fn ($key) => $key, $sortFunction = 'ksort');
     $indent = makeIndent($depth);
     $formettedValue = array_map(function ($key, $value) use ($depth, $indent): string {
-        $formattedValue = strigify($value, $depth + 1);
+        $formattedValue = stringify($value, $depth + 1);
         return "{$indent}    {$key}: $formattedValue";
     }, array_keys($sortedValue), $sortedValue);
     $result = implode("\n", $formettedValue);
