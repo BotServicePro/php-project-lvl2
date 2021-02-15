@@ -30,4 +30,3 @@ function genDiff($path1, $path2, $format = 'stylish'): string
     $differedTree = buildTree($firstData, $secondData);
     return format($differedTree, $format);
 }
-
